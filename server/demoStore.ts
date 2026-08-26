@@ -1,4 +1,5 @@
 import { seededPensioners, syntheticCampDistances, syntheticCamps, type PensionerProfile } from "@shared/mockData";
+import { FAMILY_LINK_MAX_ATTEMPTS, FAMILY_LINK_TTL_MS } from "../shared/prototypeConfig";
 
 export type VerificationStatus = "due" | "in_progress" | "pending_family" | "submitted";
 
@@ -7,6 +8,7 @@ type PensionerState = {
   method?: "fingerprint" | "liveness" | "family";
   confirmationRef?: string;
   reminder: { sms: boolean; voice: boolean; family: boolean };
+  persistence: "local";
   familyToken?: string;
   updatedAt: number;
 };
@@ -15,11 +17,14 @@ type FamilyLink = {
   token: string;
   pensionerId: string;
   createdAt: number;
+  attemptCount: number;
+  completedAt?: number;
 };
 
 const createState = (): PensionerState => ({
   status: "due",
   reminder: { sms: true, voice: false, family: true },
+  persistence: "local",
   updatedAt: Date.now(),
 });
 
@@ -82,20 +87,37 @@ export function completeLiveness(pensionerId: string) {
 export function createFamilyLink(pensionerId: string) {
   const profile = getProfile(pensionerId);
   const state = ensureState(pensionerId);
-  if (state.familyToken) {
-    return { token: state.familyToken, code: state.familyToken.slice(-6), profile, state };
+  const existingLink = state.familyToken ? familyLinks.get(state.familyToken) : undefined;
+  if (existingLink) {
+    try {
+      assertActiveFamilyLink(existingLink);
+      if (!existingLink.completedAt) {
+        return { token: existingLink.token, code: existingLink.token.slice(-6).toUpperCase(), profile, state };
+      }
+    } catch {
+      // Expired links are replaced with a fresh synthetic link below.
+    }
   }
+  state.familyToken = undefined;
   const token = `assist-${Math.random().toString(36).slice(2, 10)}`;
-  familyLinks.set(token, { token, pensionerId, createdAt: Date.now() });
+  familyLinks.set(token, { token, pensionerId, createdAt: Date.now(), attemptCount: 0 });
   state.status = "pending_family";
   state.familyToken = token;
   state.updatedAt = Date.now();
   return { token, code: token.slice(-6).toUpperCase(), profile, state };
 }
 
+function assertActiveFamilyLink(link: FamilyLink) {
+  if (Date.now() - link.createdAt > FAMILY_LINK_TTL_MS) {
+    familyLinks.delete(link.token);
+    throw new Error("This synthetic family-assist link has expired or was reset");
+  }
+}
+
 export function readFamilyLink(token: string) {
   const link = familyLinks.get(token);
   if (!link) throw new Error("This synthetic family-assist link has expired or was reset");
+  assertActiveFamilyLink(link);
   const profile = getProfile(link.pensionerId);
   return { profile, state: ensureState(link.pensionerId), token };
 }
@@ -103,15 +125,24 @@ export function readFamilyLink(token: string) {
 export function verifyFamilyLink(token: string, answer: string) {
   const link = familyLinks.get(token);
   if (!link) throw new Error("This synthetic family-assist link has expired or was reset");
+  assertActiveFamilyLink(link);
+  if (link.completedAt) throw new Error("This synthetic family-assist link has already been completed");
+  if (link.attemptCount >= FAMILY_LINK_MAX_ATTEMPTS) {
+    throw new Error("This synthetic family-assist link needs a fresh attempt");
+  }
   const profile = getProfile(link.pensionerId);
   if (answer.trim().toLowerCase() !== profile.family.answer.toLowerCase()) {
-    throw new Error("That synthetic knowledge answer does not match this demo profile");
+    link.attemptCount += 1;
+    throw new Error(link.attemptCount >= FAMILY_LINK_MAX_ATTEMPTS
+      ? "This synthetic family-assist link needs a fresh attempt"
+      : "That synthetic knowledge answer does not match this demo profile");
   }
   const state = ensureState(link.pensionerId);
   state.status = "submitted";
   state.method = "family";
   state.confirmationRef = reference();
   state.updatedAt = Date.now();
+  link.completedAt = state.updatedAt;
   return { profile, state };
 }
 

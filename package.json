@@ -10,6 +10,7 @@
     "check": "tsc --noEmit",
     "format": "prettier --write .",
     "test": "vitest run",
+    "test:production": "node scripts/production-smoke.mjs",
     "db:push": "drizzle-kit generate && drizzle-kit migrate",
     "build:vercel": "vite build && esbuild server/vercel/trpc.ts --platform=node --bundle --format=esm --outfile=api/[...path].js"
   },

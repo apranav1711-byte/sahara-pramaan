@@ -1,0 +1,15 @@
+{
+  "name": "Sahara Pramaan",
+  "short_name": "Sahara Pramaan",
+  "description": "A calm, accessible certificate-support service concept.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbf6ee",
+  "theme_color": "#0d3434",
+  "lang": "en",
+  "categories": ["health", "lifestyle", "utilities"],
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

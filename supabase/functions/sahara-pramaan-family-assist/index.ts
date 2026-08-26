@@ -61,6 +61,9 @@ const profiles = {
   },
 } as const;
 
+const FAMILY_LINK_TTL_MS = 24 * 60 * 60 * 1_000;
+const FAMILY_LINK_MAX_ATTEMPTS = 5;
+
 const reference = () =>
   `SP-${new Date().getFullYear()}-${crypto.randomUUID().slice(0, 5).toUpperCase()}`;
 
@@ -87,6 +90,10 @@ Deno.serve(async (req) => {
     if (!link || !(link.pensioner_id in profiles)) {
       return response({ error: "This synthetic family-assist link has expired or was reset" }, 404);
     }
+    if (!link.created_at || Date.now() - Date.parse(link.created_at) > FAMILY_LINK_TTL_MS) {
+      await supabase.from("sp_family_assist_links").delete().eq("token", token);
+      return response({ error: "This synthetic family-assist link has expired or was reset" }, 410);
+    }
 
     const profile = profiles[link.pensioner_id as keyof typeof profiles];
 
@@ -105,13 +112,28 @@ Deno.serve(async (req) => {
     }
 
     if (body.operation === "verify") {
+      if (link.completed_at) {
+        return response({ error: "This synthetic family-assist link has already been completed" }, 409);
+      }
+      const attempts = Number(link.attempt_count || 0);
+      if (attempts >= FAMILY_LINK_MAX_ATTEMPTS) {
+        return response({ error: "This synthetic family-assist link needs a fresh attempt" }, 429);
+      }
       if (
         String(body.answer || "").trim().toLowerCase() !==
         profile.family.answer.toLowerCase()
       ) {
+        const nextAttempts = attempts + 1;
+        const { error: attemptError } = await supabase
+          .from("sp_family_assist_links")
+          .update({ attempt_count: nextAttempts, last_attempt_at: new Date().toISOString() })
+          .eq("token", token);
+        if (attemptError) throw attemptError;
         return response(
-          { error: "That synthetic knowledge answer does not match this demo profile" },
-          400,
+          { error: nextAttempts >= FAMILY_LINK_MAX_ATTEMPTS
+            ? "This synthetic family-assist link needs a fresh attempt"
+            : "That synthetic knowledge answer does not match this demo profile" },
+          nextAttempts >= FAMILY_LINK_MAX_ATTEMPTS ? 429 : 400,
         );
       }
 

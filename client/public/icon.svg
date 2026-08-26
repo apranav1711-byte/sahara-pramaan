@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192" role="img" aria-labelledby="title desc">
+  <title id="title">Sahara Pramaan</title>
+  <desc id="desc">A dark teal square with a warm sun and simple service mark.</desc>
+  <rect width="192" height="192" rx="42" fill="#0d3434"/>
+  <circle cx="96" cy="72" r="28" fill="#f3b64c"/>
+  <path d="M47 135h98M60 135V99h72v36M72 99V84h48v15M84 135v-20h24v20" fill="none" stroke="#fbf6ee" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

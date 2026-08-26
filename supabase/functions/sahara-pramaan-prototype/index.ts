@@ -68,6 +68,8 @@ type ReminderRow = {
   family_enabled: boolean;
 };
 
+const FAMILY_LINK_TTL_MS = 24 * 60 * 60 * 1_000;
+
 const validId = (value: unknown): value is ProfileId =>
   typeof value === "string" && value in profiles;
 
@@ -227,16 +229,20 @@ Deno.serve(async (req) => {
     if (operation === "create-family-link") {
       const { data: existing } = await supabase
         .from("sp_family_assist_links")
-        .select("token")
+        .select("token, created_at")
         .eq("pensioner_id", body.pensionerId)
         .is("completed_at", null)
         .limit(1)
         .maybeSingle();
-      const token = existing?.token || `assist-${crypto.randomUUID().slice(0, 10)}`;
-      if (!existing) {
+      const existingIsActive = existing && Date.now() - Date.parse(existing.created_at) <= FAMILY_LINK_TTL_MS;
+      if (existing && !existingIsActive) {
+        await supabase.from("sp_family_assist_links").delete().eq("token", existing.token);
+      }
+      const token = existingIsActive ? existing.token : `assist-${crypto.randomUUID().slice(2, 12)}`;
+      if (!existingIsActive) {
         const { error } = await supabase
           .from("sp_family_assist_links")
-          .insert({ token, pensioner_id: body.pensionerId });
+          .insert({ token, pensioner_id: body.pensionerId, attempt_count: 0 });
         if (error) throw error;
       }
       await supabase

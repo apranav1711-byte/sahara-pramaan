@@ -16720,10 +16720,18 @@ var syntheticCampDistances = {
   "110075": { "camp-8": 0.9, "camp-5": 3.1, "camp-3": 3.9, "camp-6": 4.6, "camp-2": 5.1, "camp-1": 6.5, "camp-4": 8.2, "camp-7": 9.8 }
 };
 
+// shared/prototypeConfig.ts
+var FAMILY_STATUS_POLL_MS = 2e3;
+var FAMILY_STATUS_VISIBLE_TARGET_MS = 5e3;
+var FAMILY_LINK_TTL_MS = 24 * 60 * 60 * 1e3;
+var FAMILY_LINK_MAX_ATTEMPTS = 5;
+var familyStatusPollingMeetsTarget = FAMILY_STATUS_POLL_MS < FAMILY_STATUS_VISIBLE_TARGET_MS;
+
 // server/demoStore.ts
 var createState = () => ({
   status: "due",
   reminder: { sms: true, voice: false, family: true },
+  persistence: "local",
   updatedAt: Date.now()
 });
 var states = /* @__PURE__ */ new Map();
@@ -16777,34 +16785,56 @@ function completeLiveness(pensionerId) {
 function createFamilyLink(pensionerId) {
   const profile = getProfile(pensionerId);
   const state = ensureState(pensionerId);
-  if (state.familyToken) {
-    return { token: state.familyToken, code: state.familyToken.slice(-6), profile, state };
+  const existingLink = state.familyToken ? familyLinks.get(state.familyToken) : void 0;
+  if (existingLink) {
+    try {
+      assertActiveFamilyLink(existingLink);
+      if (!existingLink.completedAt) {
+        return { token: existingLink.token, code: existingLink.token.slice(-6).toUpperCase(), profile, state };
+      }
+    } catch {
+    }
   }
+  state.familyToken = void 0;
   const token = `assist-${Math.random().toString(36).slice(2, 10)}`;
-  familyLinks.set(token, { token, pensionerId, createdAt: Date.now() });
+  familyLinks.set(token, { token, pensionerId, createdAt: Date.now(), attemptCount: 0 });
   state.status = "pending_family";
   state.familyToken = token;
   state.updatedAt = Date.now();
   return { token, code: token.slice(-6).toUpperCase(), profile, state };
 }
+function assertActiveFamilyLink(link) {
+  if (Date.now() - link.createdAt > FAMILY_LINK_TTL_MS) {
+    familyLinks.delete(link.token);
+    throw new Error("This synthetic family-assist link has expired or was reset");
+  }
+}
 function readFamilyLink(token) {
   const link = familyLinks.get(token);
   if (!link) throw new Error("This synthetic family-assist link has expired or was reset");
+  assertActiveFamilyLink(link);
   const profile = getProfile(link.pensionerId);
   return { profile, state: ensureState(link.pensionerId), token };
 }
 function verifyFamilyLink(token, answer) {
   const link = familyLinks.get(token);
   if (!link) throw new Error("This synthetic family-assist link has expired or was reset");
+  assertActiveFamilyLink(link);
+  if (link.completedAt) throw new Error("This synthetic family-assist link has already been completed");
+  if (link.attemptCount >= FAMILY_LINK_MAX_ATTEMPTS) {
+    throw new Error("This synthetic family-assist link needs a fresh attempt");
+  }
   const profile = getProfile(link.pensionerId);
   if (answer.trim().toLowerCase() !== profile.family.answer.toLowerCase()) {
-    throw new Error("That synthetic knowledge answer does not match this demo profile");
+    link.attemptCount += 1;
+    throw new Error(link.attemptCount >= FAMILY_LINK_MAX_ATTEMPTS ? "This synthetic family-assist link needs a fresh attempt" : "That synthetic knowledge answer does not match this demo profile");
   }
   const state = ensureState(link.pensionerId);
   state.status = "submitted";
   state.method = "family";
   state.confirmationRef = reference();
   state.updatedAt = Date.now();
+  link.completedAt = state.updatedAt;
   return { profile, state };
 }
 function updateReminder(pensionerId, reminder) {
@@ -16837,6 +16867,7 @@ function normalizeState(state, reminder) {
       voice: typeof reminder?.voice_enabled === "boolean" ? reminder.voice_enabled : false,
       family: typeof reminder?.family_enabled === "boolean" ? reminder.family_enabled : true
     },
+    persistence: "remote",
     updatedAt: state.updated_at ? new Date(state.updated_at).getTime() : Date.now()
   };
 }

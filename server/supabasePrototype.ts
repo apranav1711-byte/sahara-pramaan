@@ -38,6 +38,7 @@ function normalizeState(state: RemoteState, reminder?: RemoteReminder | null) {
       voice: typeof reminder?.voice_enabled === "boolean" ? reminder.voice_enabled : false,
       family: typeof reminder?.family_enabled === "boolean" ? reminder.family_enabled : true,
     },
+    persistence: "remote" as const,
     updatedAt: state.updated_at ? new Date(state.updated_at).getTime() : Date.now(),
   };
 }
