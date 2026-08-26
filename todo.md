@@ -10,27 +10,27 @@
 - [x] Build simulated face/liveness verification with webcam permission handling and a camera-denied fallback.
 - [x] Build a synthetic confirmation artifact with a prominent non-official prototype watermark and download/share action.
 - [x] Build the public family-assist link/code flow with an explicit prototype-not-secure disclaimer.
-- [x] Implement reliable two-window family-assist status synchronization and a visible update state within five seconds.
+- [x] Implement reliable two-window family-assist status synchronization and retain direct production-browser evidence that the first window visibly updates within five seconds.
 - [x] Build the illustrative mock camp locator with mock pincode sorting and accessibility-friendly results.
 - [x] Build mock reminder preferences while clearly confirming that no real messages or calls are sent.
-- [ ] Implement Hindi and English translations across all core user journeys.
-- [ ] Implement read-aloud controls, large-text mode, high-contrast mode, keyboard focus states, and reduced-motion support.
+- [x] Implement Hindi and English translations across all core user journeys.
+- [x] Implement read-aloud controls, large-text mode, high-contrast mode, keyboard focus states, and reduced-motion support.
 - [x] Build the complete in-app “How this works” disclosure page with limitations and realistic scale-up requirements.
 - [x] Add deterministic demo-reset controls and document the recording-ready test flow.
 - [x] Create README documentation covering setup, synthetic data, demo credentials, QA, limitations, reset procedure, and architecture.
 - [ ] Export the complete source and documentation to the public GitHub repository through the project’s GitHub management panel after the final checkpoint.
 - [x] Publish a cleaned public source archive backup to the GitHub repository after the managed workspace remote prevented direct push.
-- [ ] Attempt the public GitHub and Vercel handoff directly through the connected browser and account integrations.
+- [x] Attempt the public GitHub and Vercel handoff directly through the connected browser and account integrations.
 - [x] Write and run Vitest coverage for critical deterministic verification and family-assist state behavior.
 - [x] Verify visual quality through desktop and mobile screenshots, including 360px responsive behavior.
-- [ ] Verify the real two-window family-assist flow by keeping the pensioner window open, completing family assistance in a second window, and confirming the first window visibly changes within five seconds.
+- [x] Verify the real two-window family-assist flow by keeping the pensioner window open, completing family assistance in a second window, and confirming the first window visibly changes within five seconds.
 - [x] Document or test the client polling behavior that supports the automatic cross-window family status refresh.
-- [ ] Re-run the live two-window QA with timestamped evidence of the first visible submitted-state change occurring within five seconds.
-- [ ] Run a browser-based second-window family-assist submission and retain timestamped evidence from both browser windows before final checkpointing.
-- [ ] Implement explicit Hindi and English copy coverage for every core screen and verify both languages in the browser.
-- [ ] Implement and verify keyboard-visible focus styles and prefers-reduced-motion behavior across interactive controls.
+- [x] Re-run the live two-window QA with timestamped evidence of the first visible submitted-state change occurring within five seconds.
+- [x] Run a browser-based second-window family-assist submission and retain timestamped evidence from both browser windows before final checkpointing.
+- [x] Implement explicit Hindi and English copy coverage for every core screen and verify both languages in the browser.
+- [x] Implement and verify keyboard-visible focus styles and prefers-reduced-motion behavior across interactive controls.
 - [x] Capture and review the landing experience at a 360px viewport and address any responsive or touch-target regressions.
 - [x] Record explicit 360px findings for overflow, primary touch targets, navigation controls, and content-card readability.
-- [ ] Deploy the public application to Vercel and verify the production URL, credentials, accessibility controls, and two-window flow.
+- [x] Deploy the public application to Vercel and verify the production URL, credentials, accessibility controls, and two-window flow.
 - [ ] Send a concise project-completion email once the public deployment and QA milestone are complete.
-- [ ] Defer final video generation until the user supplies the screen-recording walkthrough.
+- [x] Defer final video generation until the user supplies the screen-recording walkthrough.
