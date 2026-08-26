@@ -82,7 +82,7 @@ The final demo video is intentionally deferred until the project owner supplies 
 
 ## Release handoff
 
-The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
+The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), [`docs/india-hackathon-roadmap.md`](./docs/india-hackathon-roadmap.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
 
 ## Tooling disclosure
 
