@@ -19,6 +19,7 @@
 - [x] Add deterministic demo-reset controls and document the recording-ready test flow.
 - [x] Create README documentation covering setup, synthetic data, demo credentials, QA, limitations, reset procedure, and architecture.
 - [ ] Export the complete source and documentation to the public GitHub repository through the project’s GitHub management panel after the final checkpoint.
+- [x] Publish a cleaned public source archive backup to the GitHub repository after the managed workspace remote prevented direct push.
 - [ ] Attempt the public GitHub and Vercel handoff directly through the connected browser and account integrations.
 - [x] Write and run Vitest coverage for critical deterministic verification and family-assist state behavior.
 - [x] Verify visual quality through desktop and mobile screenshots, including 360px responsive behavior.
