@@ -11,3 +11,5 @@ The public repository is available at [apranav1711-byte/sahara-pramaan](https://
 ## Deployment
 
 The application is designed for the managed deployment workflow. The user requested Vercel, but public publishing must be initiated from the project management interface after the final checkpoint; the public GitHub repository can then be used as an external source mirror if desired.
+
+The connected Vercel context has one Hobby team, **Pranav aggarwal's projects** (`team_1Fn5H51wGt5eTQCl94bF2SsQ`), with no linked Git projects at the time of inspection. No Vercel project or deployment was created by this workflow. Once the checkpoint is exported to the public GitHub repository, the repository can be linked to that team from Vercel for a preview or production deployment.

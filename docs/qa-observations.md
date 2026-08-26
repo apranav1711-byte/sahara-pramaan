@@ -98,6 +98,12 @@ The public landing page was reviewed at both 375px and 360px mobile widths after
 
 The 360px capture shows no clipped navigation, horizontal scroll, or off-canvas footer content. The menu button and primary/secondary call-to-action buttons remain approximately 48px or taller; the primary actions use the full available width. The three alternative-path cards remain visible without overlap, with labels wrapping onto two lines where needed but remaining legible. The certificate-preview card scales below the actions without collision. No 360px-specific CSS correction was required after this review.
 
+## Language Rendering Baseline
+
+The refreshed English landing and comfort menu were checked before the Hindi pass. The header retains read-aloud, disclosure, language, large-text, high-contrast, reset, and menu controls, with all English labels visible and reachable.
+
+The Hindi pass was then checked in the same browser. The brand descriptor, read-aloud and disclosure links, comfort-menu labels, language label, large-text and contrast descriptions, reset action, prototype badge, hero copy, primary actions, alternative-path cards, certificate-preview labels, and footer disclosure all rendered in Hindi. The core navigation and landing guidance now have explicit browser-verified Hindi and English coverage.
+
 ## Build and Test Verification
 
 The production build completed successfully with Vite and the server bundle. TypeScript completed with zero errors, and the configured Vitest suite passed all five tests across authentication logout behavior, deterministic synthetic demo-state behavior, and the two-second family-status polling contract. The build emitted only a bundle-size optimization warning; it did not block the production build or the current prototype flows.
