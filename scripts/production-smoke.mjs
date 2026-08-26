@@ -36,13 +36,16 @@ try {
   assert(login.pensionerId === "pensioner-demo-fail", "Unexpected synthetic login result");
   const camps = await query("prototype.camps", { pincode: "110001" });
   assert(Array.isArray(camps) && camps.length > 0, "Synthetic camp list is empty");
+  const supportLocations = await query("prototype.liveLocations", { pincode: "110001" });
+  assert((supportLocations.source === "google" || supportLocations.source === "synthetic") && Array.isArray(supportLocations.locations), "Support-location response is malformed");
+  assert(supportLocations.center && Number.isFinite(supportLocations.center.lat) && Number.isFinite(supportLocations.center.lng), "Support-location center is malformed");
   const link = await mutation("prototype.createFamilyLink", { pensionerId: login.pensionerId });
   assert(link.token && link.code, "Synthetic family link was not created");
   const reminder = await mutation("prototype.reminder", { pensionerId: login.pensionerId, sms: false, voice: true, family: false });
   assert(reminder.state.reminder.voice === true && reminder.state.reminder.sms === false, "Reminder write did not persist");
   const readback = await query("prototype.pensioner", { pensionerId: login.pensionerId });
   assert(readback.state.reminder.voice === true && readback.state.reminder.sms === false, "Reminder readback did not persist");
-  console.log(JSON.stringify({ ok: true, checks: ["manifest", "service-worker", "login", "camps", "family-link", "reminder-readback"], pensionerId: login.pensionerId }));
+  console.log(JSON.stringify({ ok: true, checks: ["manifest", "service-worker", "login", "camps", "support-locations", "family-link", "reminder-readback"], supportSource: supportLocations.source, pensionerId: login.pensionerId }));
 } finally {
   await mutation("prototype.reset", {}).catch((error) => {
     console.error(`Synthetic reset failed: ${error.message}`);

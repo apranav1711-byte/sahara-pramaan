@@ -6,7 +6,7 @@
 
 ## What works today
 
-The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, light/dark themes, a preferred-language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud controls with an immediate stop action, installable PWA assets, and a local offline shell.
+The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, light/dark themes, a fully rendered language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud controls with an immediate stop action, installable PWA assets, and a local offline shell.
 
 | Journey | Demonstration behavior |
 | --- | --- |
@@ -33,7 +33,7 @@ The user experience deliberately states that family assistance is a **synthetic 
 
 ## Synthetic data and privacy boundary
 
-The project contains only synthetic pensioners, simulated biometric and liveness outcomes, mock OTPs, illustrative camp names and distances, fake confirmation references, and simulated reminder preferences. No real Aadhaar, PAN, payment details, accounts, biometric information, photos, location data, or messages are used or stored.
+The project contains only synthetic pensioners, simulated biometric and liveness outcomes, mock OTPs, synthetic fallback location names and distances, fake confirmation references, and simulated reminder preferences. Live Google Places results are fetched transiently through the server-side proxy for the locator and are not written to the project database. No real Aadhaar, PAN, payment details, accounts, biometric information, photos, or messages are used or stored.
 
 Supabase is used only for the synthetic state required for the public two-window demonstration. The application uses two whitelisted edge functions and three isolated tables:
 
@@ -45,7 +45,9 @@ Supabase is used only for the synthetic state required for the public two-window
 
 ## India-first location behavior
 
-The locator accepts a six-digit Indian PIN code for synthetic postal-area sorting and validates the input as numeric. It also offers an optional browser location permission action for a more relevant nearby experience and displays the device-reported accuracy for the current session without storing coordinates. A PIN code cannot identify an exact household location; a future DIGIPIN integration would require a separate official specification and privacy review.
+The locator accepts a six-digit Indian PIN code and sends it to a server-side Google Maps proxy for postal-area geocoding, then requests nearby places using a support-oriented search. With explicit browser consent, the user may instead provide temporary device coordinates; coordinates are held in React state only and are not persisted. Results include a live Google map, distances, and **Open map** links when the proxy returns real Google Places data. If the proxy, credentials, quota, or map script is unavailable, the experience switches to clearly labeled synthetic illustrative locations; it never labels fallback records as live.
+
+A PIN code identifies a broad postal area and cannot identify an exact household location. A future DIGIPIN integration would require a separate official specification, device-level consent design, and privacy review.
 
 ## Demo reset
 

@@ -76,7 +76,7 @@
 
 /// <reference types="@types/google.maps" />
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePersistFn } from "@/hooks/usePersistFn";
 import { cn } from "@/lib/utils";
 
@@ -93,26 +93,34 @@ const FORGE_BASE_URL =
 const MAPS_PROXY_URL = `${FORGE_BASE_URL}/v1/maps/proxy`;
 
 function loadMapScript() {
-  return new Promise(resolve => {
+  return new Promise<void>((resolve, reject) => {
+    if (window.google?.maps?.Map) { resolve(); return; }
     const script = document.createElement("script");
     script.src = `${MAPS_PROXY_URL}/maps/api/js?key=${API_KEY}&v=weekly&libraries=marker,places,geocoding,geometry`;
     script.async = true;
     script.crossOrigin = "anonymous";
     script.onload = () => {
-      resolve(null);
+      resolve();
       script.remove(); // Clean up immediately
     };
     script.onerror = () => {
-      console.error("Failed to load Google Maps script");
+      script.remove();
+      reject(new Error("Google Maps could not be loaded."));
     };
     document.head.appendChild(script);
   });
 }
 
+export type MapMarker = {
+  position: google.maps.LatLngLiteral;
+  title: string;
+};
+
 interface MapViewProps {
   className?: string;
   initialCenter?: google.maps.LatLngLiteral;
   initialZoom?: number;
+  markers?: MapMarker[];
   onMapReady?: (map: google.maps.Map) => void;
 }
 
@@ -120,14 +128,22 @@ export function MapView({
   className,
   initialCenter = { lat: 37.7749, lng: -122.4194 },
   initialZoom = 12,
+  markers = [],
   onMapReady,
 }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<google.maps.Map | null>(null);
+  const markerInstances = useRef<google.maps.marker.AdvancedMarkerElement[]>([]);
+  const [mapError, setMapError] = useState(false);
 
   const init = usePersistFn(async () => {
-    await loadMapScript();
-    if (!mapContainer.current) {
+    try {
+      await loadMapScript();
+    } catch {
+      setMapError(true);
+      return;
+    }
+    if (!mapContainer.current || !window.google?.maps?.Map) {
       console.error("Map container not found");
       return;
     }
@@ -140,6 +156,8 @@ export function MapView({
       streetViewControl: true,
       mapId: "DEMO_MAP_ID",
     });
+    markerInstances.current = markers.map(({ position, title }) => new window.google.maps.marker.AdvancedMarkerElement({ map: map.current!, position, title }));
+    if (markers[0]) map.current.setCenter(markers[0].position);
     if (onMapReady) {
       onMapReady(map.current);
     }
@@ -149,7 +167,16 @@ export function MapView({
     init();
   }, [init]);
 
+  useEffect(() => {
+    if (!map.current || !window.google?.maps?.marker) return;
+    markerInstances.current.forEach(marker => { marker.map = null; });
+    markerInstances.current = markers.map(({ position, title }) => new window.google.maps.marker.AdvancedMarkerElement({ map: map.current!, position, title }));
+    if (markers[0]) map.current.setCenter(markers[0].position);
+  }, [markers]);
+
   return (
-    <div ref={mapContainer} className={cn("w-full h-[500px]", className)} />
+    <div ref={mapContainer} className={cn("w-full h-[500px]", className)}>
+      {mapError && <div className="grid h-full min-h-64 place-items-center bg-sahara-mist px-6 text-center text-sm font-bold text-sahara-forest">Google Maps is unavailable in this browser. Use the nearby place links below.</div>}
+    </div>
   );
 }

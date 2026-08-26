@@ -4,6 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, router } from "./_core/trpc";
 import { listSyntheticCamps } from "./demoStore";
+import { findSupportLocations } from "./realLocations";
 import {
   remoteCreateFamilyLink,
   remoteFamilyLink,
@@ -41,6 +42,7 @@ export const appRouter = router({
       .input(z.object({ token: z.string().min(1), answer: z.string().min(1) }))
       .mutation(({ input }) => remoteVerifyFamily(input.token, input.answer)),
     camps: publicProcedure.input(z.object({ pincode: z.string().optional() })).query(({ input }) => listSyntheticCamps(input.pincode)),
+    liveLocations: publicProcedure.input(z.object({ pincode: z.string().optional(), lat: z.number().optional(), lng: z.number().optional() })).query(({ input }) => findSupportLocations(input)),
     reminder: publicProcedure
       .input(pensionerInput.extend({ sms: z.boolean(), voice: z.boolean(), family: z.boolean() }))
       .mutation(({ input }) => remoteReminder(input.pensionerId, { sms: input.sms, voice: input.voice, family: input.family })),

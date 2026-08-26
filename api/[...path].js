@@ -16853,6 +16853,104 @@ function resetSyntheticDemo() {
   return { success: true };
 }
 
+// server/_core/map.ts
+function getMapsConfig() {
+  const baseUrl = ENV.forgeApiUrl;
+  const apiKey = ENV.forgeApiKey;
+  if (!baseUrl || !apiKey) {
+    throw new Error(
+      "Google Maps proxy credentials missing: set BUILT_IN_FORGE_API_URL and BUILT_IN_FORGE_API_KEY"
+    );
+  }
+  return {
+    baseUrl: baseUrl.replace(/\/+$/, ""),
+    apiKey
+  };
+}
+async function makeRequest(endpoint, params = {}, options = {}) {
+  const { baseUrl, apiKey } = getMapsConfig();
+  const url2 = new URL(`${baseUrl}/v1/maps/proxy${endpoint}`);
+  url2.searchParams.append("key", apiKey);
+  Object.entries(params).forEach(([key, value]) => {
+    if (value !== void 0 && value !== null) {
+      url2.searchParams.append(key, String(value));
+    }
+  });
+  const response = await fetch(url2.toString(), {
+    method: options.method || "GET",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: options.body ? JSON.stringify(options.body) : void 0
+  });
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(
+      `Google Maps API request failed (${response.status} ${response.statusText}): ${errorText}`
+    );
+  }
+  return await response.json();
+}
+
+// server/realLocations.ts
+var DELHI_CENTER = { lat: 28.6139, lng: 77.209 };
+function syntheticResponse(pincode, message = "Showing illustrative support locations while live map data is unavailable.") {
+  const locations = listSyntheticCamps(pincode).slice(0, 8).map((camp) => ({
+    id: camp.id,
+    name: camp.name,
+    address: `${camp.address}, India`,
+    kind: camp.kind,
+    distanceKm: camp.distanceKm
+  }));
+  return { source: "synthetic", center: DELHI_CENTER, locations, message };
+}
+function geocodedCenter(result) {
+  const location = result.results[0]?.geometry?.location;
+  return location && Number.isFinite(location.lat) && Number.isFinite(location.lng) ? location : null;
+}
+function distanceKm(from, to) {
+  const radians = (value) => value * Math.PI / 180;
+  const earthRadiusKm = 6371;
+  const dLat = radians(to.lat - from.lat);
+  const dLng = radians(to.lng - from.lng);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(radians(from.lat)) * Math.cos(radians(to.lat)) * Math.sin(dLng / 2) ** 2;
+  return Number((earthRadiusKm * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))).toFixed(1));
+}
+async function findSupportLocations(input) {
+  const hasCoordinates = Number.isFinite(input.lat) && Number.isFinite(input.lng);
+  if (!hasCoordinates && !/^\d{6}$/.test(input.pincode || "")) return syntheticResponse(input.pincode, "Enter a six-digit Indian PIN code or allow location access to search nearby.");
+  try {
+    let center = { lat: input.lat, lng: input.lng };
+    if (!hasCoordinates) {
+      const geocode = await makeRequest("/maps/api/geocode/json", { address: `${input.pincode}, India`, region: "in" });
+      const resolved = geocodedCenter(geocode);
+      if (!resolved) return syntheticResponse(input.pincode, "That PIN code could not be located by the live map service; showing illustrative results instead.");
+      center = resolved;
+    }
+    const places = await makeRequest("/maps/api/place/nearbysearch/json", {
+      location: `${center.lat},${center.lng}`,
+      radius: 1e4,
+      keyword: "post office bank common service centre"
+    });
+    const locations = (places.results || []).slice(0, 8).map((place) => ({
+      id: place.place_id,
+      name: place.name,
+      address: place.formatted_address,
+      kind: place.types?.includes("post_office") ? "Post office" : "Nearby support place",
+      distanceKm: distanceKm(center, place.geometry.location),
+      rating: place.rating,
+      placeId: place.place_id,
+      location: place.geometry.location,
+      mapsUrl: `https://www.google.com/maps/search/?api=1&query=Google&query_place_id=${encodeURIComponent(place.place_id)}`
+    }));
+    if (!locations.length) return syntheticResponse(input.pincode, "No nearby support places were returned by the live map service; showing illustrative results instead.");
+    return { source: "google", center, locations, message: "Live Google Maps places shown near your selected area. Confirm opening hours before travelling." };
+  } catch (error46) {
+    console.warn("Live support-location lookup failed; using synthetic fallback", error46);
+    return syntheticResponse(input.pincode);
+  }
+}
+
 // server/supabasePrototype.ts
 var PROJECT_URL = "https://ehwwpesbwvohrazllutu.supabase.co/functions/v1";
 var prototypeEndpoint = `${PROJECT_URL}/sahara-pramaan-prototype`;
@@ -16973,6 +17071,7 @@ var appRouter = router({
     familyLink: publicProcedure.input(external_exports.object({ token: external_exports.string().min(1) })).query(({ input }) => remoteFamilyLink(input.token)),
     verifyFamily: publicProcedure.input(external_exports.object({ token: external_exports.string().min(1), answer: external_exports.string().min(1) })).mutation(({ input }) => remoteVerifyFamily(input.token, input.answer)),
     camps: publicProcedure.input(external_exports.object({ pincode: external_exports.string().optional() })).query(({ input }) => listSyntheticCamps(input.pincode)),
+    liveLocations: publicProcedure.input(external_exports.object({ pincode: external_exports.string().optional(), lat: external_exports.number().optional(), lng: external_exports.number().optional() })).query(({ input }) => findSupportLocations(input)),
     reminder: publicProcedure.input(pensionerInput.extend({ sms: external_exports.boolean(), voice: external_exports.boolean(), family: external_exports.boolean() })).mutation(({ input }) => remoteReminder(input.pensionerId, { sms: input.sms, voice: input.voice, family: input.family })),
     reset: publicProcedure.mutation(() => remoteReset())
   })
