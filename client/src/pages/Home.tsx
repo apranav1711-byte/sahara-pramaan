@@ -391,8 +391,9 @@ export default function Home() {
       reminders: "Choose your mock reminder preferences, then save them.",
       how: "Review what this service concept can and cannot do.",
     };
-    return messages[screen] || messages.landing;
-  }, [lang, screen, state?.status]);
+    const guidedScreen = assistToken || linkCreated ? "familyLink" : screen;
+    return messages[guidedScreen] || messages.landing;
+  }, [lang, screen, state?.status, assistToken, linkCreated]);
 
   const repeatGuidance = () => {
     if (!("speechSynthesis" in window)) return toast.error("Read-aloud is not supported in this browser.");
