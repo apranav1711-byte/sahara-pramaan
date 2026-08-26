@@ -30,9 +30,11 @@ The final isolated Chromium run started a fresh synthetic `DEMO-FAIL` journey on
 
 The final accessibility run emulated `prefers-reduced-motion: reduce` in Chromium. The public media query matched, and `.float-gentle` plus `.page-enter` computed to `0.00001s` animation duration. Keyboard `Tab` focus had a 3px solid outline. A controlled instrumentation shim observed one browser-native speech-synthesis invocation after selecting **Read this aloud**. This demonstrates control invocation only; physical sandbox audio output is not asserted.
 
-## Remaining Delivery Gates
+## Delivery Completion and Deferred Video
 
-The current remaining operational task is to synchronize the revised QA documents and checklist to the public GitHub branch; the authenticated command-line integration returned `403 Resource not accessible by integration`, and the restored browser session is not signed in. Final completion email remains unsent until the public documentation sync is restored. Video generation remains deferred pending the user’s screen-recording walkthrough.
+The reconciled QA records were committed to the public GitHub branch as [`7edbce4`](https://github.com/apranav1711-byte/sahara-pramaan/commit/7edbce4d9207687f8130d6801adf3f9dfd219757), and the completed checklist was committed as [`8f79288`](https://github.com/apranav1711-byte/sahara-pramaan/commit/8f792888c41aeb02ddc0650b47536b473f9f3147). A concise completion email containing the public URL, repository link, synthetic demonstration credentials, QA state, and video-deferred note was sent to `apranav1711@gmail.com` after these checks.
+
+The only deliberately deferred deliverable is the final demo video. It must not be generated until the user supplies the requested screen-recording walkthrough, and any eventual video must preserve the prototype’s synthetic-only and non-government disclosures.
 
 ## Public References
 

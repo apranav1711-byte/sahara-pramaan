@@ -132,6 +132,8 @@ The implementation has a two-second polling contract, and the earlier measured r
 
 The current public build exposes larger-text, high-contrast, language, reset, and browser-native read-aloud controls. Visible keyboard focus has previously been confirmed as a 3px gold focus outline, and the stylesheet contains a `prefers-reduced-motion: reduce` rule. This session did not emulate reduced motion in a browser, and sandbox tooling cannot confirm that the device actually emits spoken audio. Those limits remain explicit in the accessibility checklist.
 
+> **Resolution note:** The later direct Chromium checks recorded below did emulate reduced motion, verified its computed animation durations, and instrumented one speech-synthesis invocation. Physical audio output remains outside the sandbox’s observable scope.
+
 ## Direct Two-Page Production Evidence — 26 August 2026
 
 An isolated Chromium session opened the exact Ready deployment-specific build in **two independent pages**. It used only the visible `DEMO-FAIL` synthetic journey: reset, synthetic login, deterministic fingerprint fallback, create family link, return the first pensioner page to **Family assistance pending**, open the generated `?assist=` link in the second page, enter the on-screen synthetic answer, and complete assisted verification.
