@@ -16827,12 +16827,16 @@ function resetSyntheticDemo() {
 var PROJECT_URL = "https://ehwwpesbwvohrazllutu.supabase.co/functions/v1";
 var prototypeEndpoint = `${PROJECT_URL}/sahara-pramaan-prototype`;
 var familyEndpoint = `${PROJECT_URL}/sahara-pramaan-family-assist`;
-function normalizeState(state) {
+function normalizeState(state, reminder) {
   return {
     status: state.verification_status,
     method: state.verification_method ?? void 0,
     confirmationRef: state.confirmation_ref ?? void 0,
-    reminder: { sms: true, voice: false, family: true },
+    reminder: {
+      sms: typeof reminder?.sms_enabled === "boolean" ? reminder.sms_enabled : true,
+      voice: typeof reminder?.voice_enabled === "boolean" ? reminder.voice_enabled : false,
+      family: typeof reminder?.family_enabled === "boolean" ? reminder.family_enabled : true
+    },
     updatedAt: state.updated_at ? new Date(state.updated_at).getTime() : Date.now()
   };
 }
@@ -16856,7 +16860,7 @@ async function remoteLogin(identifier, otp) {
 async function remotePensioner(pensionerId) {
   try {
     const payload = await request(prototypeEndpoint, { operation: "pensioner", pensionerId });
-    return { profile: payload.profile, state: normalizeState(payload.state) };
+    return { profile: payload.profile, state: normalizeState(payload.state, payload.reminder) };
   } catch {
     return readPensioner(pensionerId);
   }
@@ -16965,7 +16969,7 @@ var trpcVercelFunction = {
       req: trpcRequest,
       router: appRouter,
       createContext: () => ({
-        req: request2,
+        req: trpcRequest,
         res: {},
         user: null
       })
