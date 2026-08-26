@@ -22,12 +22,22 @@ type RemoteState = {
   updated_at?: string;
 };
 
-function normalizeState(state: RemoteState) {
+type RemoteReminder = {
+  sms_enabled: boolean;
+  voice_enabled: boolean;
+  family_enabled: boolean;
+};
+
+function normalizeState(state: RemoteState, reminder?: RemoteReminder | null) {
   return {
     status: state.verification_status,
     method: state.verification_method ?? undefined,
     confirmationRef: state.confirmation_ref ?? undefined,
-    reminder: { sms: true, voice: false, family: true },
+    reminder: {
+      sms: typeof reminder?.sms_enabled === "boolean" ? reminder.sms_enabled : true,
+      voice: typeof reminder?.voice_enabled === "boolean" ? reminder.voice_enabled : false,
+      family: typeof reminder?.family_enabled === "boolean" ? reminder.family_enabled : true,
+    },
     updatedAt: state.updated_at ? new Date(state.updated_at).getTime() : Date.now(),
   };
 }
@@ -50,8 +60,12 @@ export async function remoteLogin(identifier: string, otp: string) {
 
 export async function remotePensioner(pensionerId: string) {
   try {
-    const payload = await request<{ profile: ReturnType<typeof localReadPensioner>["profile"]; state: RemoteState }>(prototypeEndpoint, { operation: "pensioner", pensionerId });
-    return { profile: payload.profile, state: normalizeState(payload.state) };
+    const payload = await request<{
+      profile: ReturnType<typeof localReadPensioner>["profile"];
+      state: RemoteState;
+      reminder?: RemoteReminder | null;
+    }>(prototypeEndpoint, { operation: "pensioner", pensionerId });
+    return { profile: payload.profile, state: normalizeState(payload.state, payload.reminder) };
   } catch { return localReadPensioner(pensionerId); }
 }
 
