@@ -12,7 +12,7 @@ import { appRouter } from "../routers";
 
  * lets esbuild inline local server modules before Vercel discovers the final
 
- * Web API function in `api/trpc/[...path].js`.
+ * Web API function in `api/[...path].js`.
 
  */
 
@@ -20,17 +20,53 @@ const trpcVercelFunction = {
   
   async fetch(request: Request): Promise<Response> {
     
+    const originalUrl = new URL(request.url);
+    
+    const rewrittenProcedurePath = originalUrl.searchParams.get("trpcPath");
+    
+    if (rewrittenProcedurePath) {
+      
+      originalUrl.searchParams.delete("trpcPath");
+      
+      originalUrl.pathname = `/api/trpc/${rewrittenProcedurePath}`;
+      
+    }
+    
+
+    
+    const trpcRequest = rewrittenProcedurePath
+    
+      ? new Request(originalUrl, request)
+      
+      : request;
+    
+    const path = originalUrl.pathname;
+    
+    if (!path.startsWith("/api/trpc")) {
+      
+      return Response.json(
+        
+        { error: "Synthetic prototype API route not found." },
+        
+        { status: 404 },
+        
+      );
+      
+    }
+    
+
+    
     return fetchRequestHandler({
       
       endpoint: "/api/trpc",
       
-      req: request,
+      req: trpcRequest,
       
       router: appRouter,
       
       createContext: (): TrpcContext => ({
         
-        req: request as unknown as TrpcContext["req"],
+        req: trpcRequest as unknown as TrpcContext["req"],
         
         res: {} as TrpcContext["res"],
         
@@ -47,6 +83,24 @@ const trpcVercelFunction = {
 
 
 export default trpcVercelFunction;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
