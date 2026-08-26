@@ -141,6 +141,7 @@ const hindiDisplay: Record<string, string> = {
   "What is the name of Kamala ji’s hometown?": "कमला जी के गृहनगर का नाम क्या है?",
   "Demo answer:": "डेमो उत्तर:",
   ". Shown only because this is a recording-ready synthetic prototype.": ". केवल इसलिए दिखाया गया है क्योंकि यह रिकॉर्डिंग-तैयार कृत्रिम प्रोटोटाइप है।",
+  "Enter the synthetic demo answer": "कृत्रिम डेमो उत्तर दर्ज करें",
   "By continuing, you acknowledge this is a prototype assistance flow—not secure identity verification.": "आगे बढ़कर आप स्वीकार करते हैं कि यह प्रोटोटाइप सहायता प्रवाह है—सुरक्षित पहचान सत्यापन नहीं।",
   "Loading…": "लोड हो रहा है…",
   "Complete assisted verification": "सहायता सत्यापन पूरा करें",
