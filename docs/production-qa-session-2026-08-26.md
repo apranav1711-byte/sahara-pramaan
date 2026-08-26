@@ -1,0 +1,44 @@
+# Production QA Session — 26 August 2026
+
+## Scope
+
+This record describes the final production verification of Sahara Pramaan’s **independent, synthetic-only** public prototype. It is deliberately limited to facts observed in the public GitHub and Vercel releases, synthetic demonstration interactions, and repeatable local source validation. It does not treat illustrative state, mock credentials, or browser automation limitations as evidence of a real pension, biometric, government, financial, or messaging service.
+
+| Area | Evidence | Result |
+| --- | --- | --- |
+| Public source | GitHub `main`, commit `9e2d178` | Latest reminder-save Hindi mapping committed. |
+| Production build | Vercel marked deployment `sahara-pramaan-1aqjtuf4w-pranav-aggarwals-projects-c0ba8f4d.vercel.app` Ready | Public deployment-specific build available. |
+| Hindi reminders | `DEMO-FAIL` reminder save on that exact deployment | Hindi no-message toast observed. |
+| English reminders | Same screen switched to English and saved | English no-message toast observed. |
+| Confirmation localization | Exact deployment inspected in Hindi and English | Status, labels, synthetic-only warning, and English fallback verified; Hindi date remains source-format English month text. |
+| Source validation | `pnpm check`, `pnpm test`, `pnpm build` | Passed; isolated public-main validation covered 3 files / 5 tests and the managed workspace covered 4 files / 6 tests; builds produced only a non-blocking Vite size warning. |
+| Two-page family assist | Two independent Chromium pages on the exact public deployment | The first pensioner page rendered submitted status 2 ms after the second page rendered completion, 2,842 ms after the completion action began. |
+| Reduced motion and focus | Chromium reduced-motion emulation and keyboard inspection | Motion media query matched; animation durations became `0.00001s`; keyboard focus had a 3px solid outline. |
+| Read aloud | Instrumented browser-native speech-synthesis invocation | The public control invoked speech synthesis once; physical audio remains outside sandbox scope. |
+
+## Verified Production Behavior
+
+The public production page continues to present the independent-prototype and synthetic-data-only boundary before a user enters the test flow. The `DEMO-FAIL` and `DEMO-PASS` accounts with mock OTP `123456` remain synthetic recording aids; no real messaging is sent as part of the login path.
+
+The final reminder preference release was validated through actual UI interactions, not by inspecting source alone. Hindi save feedback read **“मॉक पसंद सहेज ली गईं। कोई संदेश नहीं भेजा जाएगा।”** and English save feedback read **“Mock preferences saved. No message will be sent.”**. This supports the intended limitation that the feature records only mock preferences and does not initiate real communications.
+
+The confirmation page was also inspected in both languages on the same release. It explicitly distinguishes itself from a government certificate and says no official life certificate, payment status, SMS, bank record, or government update was created. The static date string in Hindi is not localized to Hindi month formatting, so full locale-specific date formatting remains outside the verified scope.
+
+## Direct Two-Page and Accessibility Evidence
+
+The final isolated Chromium run started a fresh synthetic `DEMO-FAIL` journey on the exact deployment-specific build, opened its generated family-assist URL in a distinct second page, and left the original pensioner page showing **Family assistance pending**. The second page completed the visible synthetic answer at `13:44:11.049Z`, rendered **Support completed** at `13:44:13.889Z`, and the first page visibly rendered **Submitted in this demo** at `13:44:13.891Z`. This is 2 ms after second-page rendering and 2,842 ms from the completion action start, satisfying the five-second target with direct two-page evidence.
+
+The final accessibility run emulated `prefers-reduced-motion: reduce` in Chromium. The public media query matched, and `.float-gentle` plus `.page-enter` computed to `0.00001s` animation duration. Keyboard `Tab` focus had a 3px solid outline. A controlled instrumentation shim observed one browser-native speech-synthesis invocation after selecting **Read this aloud**. This demonstrates control invocation only; physical sandbox audio output is not asserted.
+
+## Remaining Delivery Gates
+
+The current remaining operational task is to synchronize the revised QA documents and checklist to the public GitHub branch; the authenticated command-line integration returned `403 Resource not accessible by integration`, and the restored browser session is not signed in. Final completion email remains unsent until the public documentation sync is restored. Video generation remains deferred pending the user’s screen-recording walkthrough.
+
+## Public References
+
+| Resource | URL |
+| --- | --- |
+| Public repository | https://github.com/apranav1711-byte/sahara-pramaan |
+| Final source commit | https://github.com/apranav1711-byte/sahara-pramaan/commit/9e2d1789e5a241b903ffca02d89de42368167fd7 |
+| Deployment-specific build | https://sahara-pramaan-1aqjtuf4w-pranav-aggarwals-projects-c0ba8f4d.vercel.app |
+| Public alias | https://sahara-pramaan.vercel.app |

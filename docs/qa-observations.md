@@ -113,3 +113,31 @@ The production build completed successfully with Vite and the server bundle. Typ
 ## Live Two-Window Polling Verification — Result
 
 The first pensioner window remained open in the browser with **Family assistance pending** displayed. A separate client completed the newly issued public family-assist token at `08:15:54.469`. The next client polling request began at `08:15:54.209` and returned after the remote completion; the pensioner window visibly switched to **Submitted in this demo** by the next rendered observation. The measured request cadence is two seconds, and the status refresh occurred within one second of the separate-client completion in this run.
+
+## Final Public Deployment Check — 26 August 2026
+
+The public GitHub `main` branch reached commit [`9e2d178`](https://github.com/apranav1711-byte/sahara-pramaan/commit/9e2d1789e5a241b903ffca02d89de42368167fd7), **Translate reminder save notification**. Vercel marked the matching production deployment as Ready at the deployment-specific URL [`sahara-pramaan-1aqjtuf4w-pranav-aggarwals-projects-c0ba8f4d.vercel.app`](https://sahara-pramaan-1aqjtuf4w-pranav-aggarwals-projects-c0ba8f4d.vercel.app). This release was the final Hindi mapping for the synthetic reminder-save toast; it did not introduce a service integration or change any synthetic-data boundary.
+
+On that exact build, a real `DEMO-FAIL` synthetic login was used to open reminder preferences. Saving preferences in Hindi showed **“मॉक पसंद सहेज ली गईं। कोई संदेश नहीं भेजा जाएगा।”**. The same screen was switched visibly to English, saved again, and showed **“Mock preferences saved. No message will be sent.”**. Both reminder descriptions continue to state that the controls save mock preferences only and do not send SMS, calls, or family alerts.
+
+The same deployment-specific build was then checked on the confirmation route in Hindi and English. Hindi rendered the confirmation heading, active-status sentence, prototype reference label, verification-path label and the explicit artificial-prototype warning. English rendered the equivalent heading, date sentence, **SYNTHETIC PROTOTYPE — NOT A GOVERNMENT CERTIFICATE** warning, reference, family verification path, and the statement that no official certificate, payment status, SMS, bank record, or government update was created. The date itself remains in the source-format English month form (`31 August 2026`) when Hindi is selected; this is known presentational behavior and must not be represented as fully localized date formatting.
+
+The public `main` checkout passed `pnpm check`, `pnpm test` (3 files and 5 tests), and `pnpm build` on 26 August 2026. Vite reported a non-blocking chunk-size optimization warning during the successful production build.
+
+### Evidence Limitation — First-Window Family Update
+
+The implementation has a two-second polling contract, and the earlier measured run recorded the first pensioner-view transition 1,781 ms after separate-client completion. A real browser second tab also completed the public synthetic family-assist form. However, the browser automation switched control to the second tab and did not provide a usable return to observe the original first tab during that production run. Therefore this record does **not** claim direct production-browser observation of the first window updating within five seconds. The associated checklist items remain open until that specific observation is captured.
+
+### Accessibility Evidence Limitation
+
+The current public build exposes larger-text, high-contrast, language, reset, and browser-native read-aloud controls. Visible keyboard focus has previously been confirmed as a 3px gold focus outline, and the stylesheet contains a `prefers-reduced-motion: reduce` rule. This session did not emulate reduced motion in a browser, and sandbox tooling cannot confirm that the device actually emits spoken audio. Those limits remain explicit in the accessibility checklist.
+
+## Direct Two-Page Production Evidence — 26 August 2026
+
+An isolated Chromium session opened the exact Ready deployment-specific build in **two independent pages**. It used only the visible `DEMO-FAIL` synthetic journey: reset, synthetic login, deterministic fingerprint fallback, create family link, return the first pensioner page to **Family assistance pending**, open the generated `?assist=` link in the second page, enter the on-screen synthetic answer, and complete assisted verification.
+
+The second page began completion at `13:44:11.049Z`, rendered **Support completed** at `13:44:13.889Z`, and the first pensioner page visibly rendered **Submitted in this demo** at `13:44:13.891Z`. The observed first-window transition was **2 ms after the second-page completion rendering** and **2,842 ms from the completion action start**, satisfying the required under-five-second result. Full-page screenshots of both independent pages and the timestamped JSON result were retained in the isolated QA workspace.
+
+## Direct Accessibility Evidence — 26 August 2026
+
+The same exact production build was tested in Chromium with `prefers-reduced-motion: reduce` emulated. The media query matched and computed animation durations for both `.float-gentle` and `.page-enter` were `0.00001s`, demonstrating that the reduced-motion rule took effect. Keyboard `Tab` focus reached the branded home button and computed a visible `3px` solid focus outline. The public **Read this aloud** button invoked the browser speech-synthesis method once under a controlled instrumentation shim. This verifies invocation, not physical audio output from the sandbox.
