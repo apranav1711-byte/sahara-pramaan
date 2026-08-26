@@ -18,7 +18,7 @@
 - [x] Build the complete in-app “How this works” disclosure page with limitations and realistic scale-up requirements.
 - [x] Add deterministic demo-reset controls and document the recording-ready test flow.
 - [x] Create README documentation covering setup, synthetic data, demo credentials, QA, limitations, reset procedure, and architecture.
-- [ ] Export the complete source and documentation to the public GitHub repository through the project’s GitHub management panel after the final checkpoint.
+- [x] Export the complete source and documentation to the public GitHub repository through the project’s GitHub management panel after the final checkpoint.
 - [x] Publish a cleaned public source archive backup to the GitHub repository after the managed workspace remote prevented direct push.
 - [x] Attempt the public GitHub and Vercel handoff directly through the connected browser and account integrations.
 - [x] Write and run Vitest coverage for critical deterministic verification and family-assist state behavior.
@@ -32,5 +32,9 @@
 - [x] Capture and review the landing experience at a 360px viewport and address any responsive or touch-target regressions.
 - [x] Record explicit 360px findings for overflow, primary touch targets, navigation controls, and content-card readability.
 - [x] Deploy the public application to Vercel and verify the production URL, credentials, accessibility controls, and two-window flow.
-- [ ] Send a concise project-completion email once the public deployment and QA milestone are complete.
+- [x] Send a concise project-completion email once the public deployment and QA milestone are complete.
 - [x] Defer final video generation until the user supplies the screen-recording walkthrough.
+- [x] Add an in-app recording-mode panel with the three synthetic demo accounts and a reset shortcut.
+- [x] Format the confirmation-card date in Hindi when the Hindi flow is active.
+- [x] Add synthetic confirmation-card export options for image and PDF download.
+- [x] Verify and document the active synthetic Supabase connection, fallback behavior, and production integration status after the enhancement release.
