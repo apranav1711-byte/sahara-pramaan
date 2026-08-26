@@ -147,6 +147,8 @@ const hindiDisplay: Record<string, string> = {
   "Complete assisted verification": "सहायता सत्यापन पूरा करें",
   "Support completed.": "सहायता पूरी हुई।",
   "Kamala ji’s prototype status has updated. The pensioner window will reflect this automatically within a few seconds.": "कमला जी की प्रोटोटाइप स्थिति अपडेट हो गई है। पेंशनभोगी विंडो कुछ सेकंड में यह बदलाव दिखाएगी।",
+  "Prototype notice:": "प्रोटोटाइप सूचना:",
+  "This result is synthetic. No real certificate, account, or notification has been created.": "यह परिणाम कृत्रिम है। कोई वास्तविक प्रमाणपत्र, खाता या सूचना नहीं बनाई गई है।",
   "Your prototype submission is complete.": "आपका प्रोटोटाइप जमा पूरा हो गया है।",
   "SYNTHETIC PROTOTYPE — NOT A GOVERNMENT CERTIFICATE": "कृत्रिम प्रोटोटाइप — सरकारी प्रमाणपत्र नहीं",
   "Verification path": "सत्यापन मार्ग",
