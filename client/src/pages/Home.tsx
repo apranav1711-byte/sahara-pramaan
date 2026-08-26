@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
+import { FAMILY_STATUS_POLL_MS } from "../../../shared/prototypeConfig";
 
 type Screen = "landing" | "login" | "home" | "fingerprint" | "fallback" | "liveness" | "familyLink" | "confirmation" | "camps" | "reminders" | "how";
 type Lang = "en" | "hi";
@@ -50,6 +51,119 @@ const text = {
     read: "इसे सुनें",
     noMessages: "कोई वास्तविक संदेश नहीं भेजा जाता।",
   },
+};
+
+const hindiDisplay: Record<string, string> = {
+  "Assisted certificate prototype": "सहायता प्रमाणपत्र प्रोटोटाइप",
+  "Comfort controls": "सुविधा नियंत्रण",
+  "Larger text": "बड़ा पाठ",
+  "Increase type across the prototype": "पूरे प्रोटोटाइप में अक्षर बड़े करें",
+  "High contrast": "उच्च कंट्रास्ट",
+  "Increase color contrast": "रंगों का अंतर बढ़ाएँ",
+  "Language": "भाषा",
+  "Uses your device’s built-in voice": "आपके उपकरण की अंतर्निहित आवाज़ का उपयोग करता है",
+  "Reset synthetic demo": "कृत्रिम डेमो रीसेट करें",
+  "A more human way to stay on track.": "आसानी से आगे बढ़ने का अधिक मानवीय तरीका।",
+  "A more": "एक अधिक",
+  "human": "मानवीय",
+  "way to stay on track.": "तरीका जिससे आप आगे बढ़ते रहें।",
+  "Built with large, calm steps for pensioners—and a simple family-assist route when an extra hand is needed.": "पेंशनभोगियों के लिए बड़े, सरल चरणों और ज़रूरत पड़ने पर परिवार-सहायता मार्ग के साथ बनाया गया।",
+  "Alternative paths": "वैकल्पिक तरीके",
+  "Family assistance": "परिवार की सहायता",
+  "Plain-language status": "सरल भाषा में स्थिति",
+  "DUE THIS MONTH": "इस महीने देय",
+  "GOOD MORNING, KAMALA JI": "सुप्रभात, कमला जी",
+  "Your yearly step is ready when you are.": "आपका वार्षिक चरण आपके तैयार होने पर शुरू हो सकता है।",
+  "NEXT STEP": "अगला चरण",
+  "Verify your life certificate": "अपना जीवन प्रमाणपत्र सत्यापित करें",
+  "Continue gently": "आसानी से आगे बढ़ें",
+  "Built for": "बनाया गया है",
+  "everyday ease": "हर दिन की सहजता के लिए",
+  "A simple start, with no real data.": "एक सरल शुरुआत, बिना किसी वास्तविक डेटा के।",
+  "This is a synthetic login for a public prototype. It does not connect to any real pension, bank, identity, or messaging system.": "यह सार्वजनिक प्रोटोटाइप के लिए कृत्रिम लॉगिन है। यह किसी वास्तविक पेंशन, बैंक, पहचान या संदेश प्रणाली से नहीं जुड़ता।",
+  "FALLBACK DEMO": "वैकल्पिक डेमो",
+  "FINGERPRINT-PASS DEMO": "फिंगरप्रिंट-सफल डेमो",
+  "Back": "वापस",
+  "Sign in to your prototype account": "अपने प्रोटोटाइप खाते में साइन इन करें",
+  "Enter a synthetic ID and mock OTP. For the best recording flow, keep the pre-filled forced-failure account.": "कृत्रिम आईडी और मॉक OTP दर्ज करें। बेहतर रिकॉर्डिंग के लिए पहले से भरे असफलता खाते का उपयोग करें।",
+  "No real messages are ever sent.": "कोई वास्तविक संदेश कभी नहीं भेजा जाता।",
+  "YOUR PROTOTYPE STATUS": "आपकी प्रोटोटाइप स्थिति",
+  "Due soon": "जल्द देय",
+  "Submitted in this demo": "इस डेमो में जमा किया गया",
+  "Family assistance pending": "परिवार सहायता की प्रतीक्षा है",
+  "Your yearly step is complete in this demo.": "इस डेमो में आपका वार्षिक चरण पूरा हो गया है।",
+  "Your synthetic record is marked complete. Keep this screen open while demonstrating the family-assist update.": "आपका कृत्रिम रिकॉर्ड पूर्ण चिह्नित है। परिवार सहायता अपडेट दिखाते समय यह स्क्रीन खुली रखें।",
+  "Start verification": "सत्यापन शुरू करें",
+  "Find a mock camp": "मॉक शिविर खोजें",
+  "Last submission": "पिछला जमा",
+  "Preferred language": "पसंदीदा भाषा",
+  "Reference": "संदर्भ",
+  "Synthetic only": "केवल कृत्रिम",
+  "Choose what feels comfortable.": "वही चुनें जो आरामदायक लगे।",
+  "Switch language, text size, contrast, or read the screen aloud at any time.": "कभी भी भाषा, पाठ आकार, कंट्रास्ट बदलें या स्क्रीन को सुनें।",
+  "Gentle reminders": "सौम्य अनुस्मारक",
+  "Review preferences": "पसंदों की समीक्षा करें",
+  "SIMULATED FINGERPRINT CHECK": "सिमुलेटेड फिंगरप्रिंट जाँच",
+  "Place your finger gently.": "अपनी उंगली हल्के से रखें।",
+  "This prototype is checking a synthetic fingerprint. No biometric image is captured, stored, or matched.": "यह प्रोटोटाइप कृत्रिम फिंगरप्रिंट की जाँच कर रहा है। कोई बायोमेट्रिक छवि कैप्चर, संग्रहित या मिलान नहीं की जाती।",
+  "Checking your demo account…": "आपका डेमो खाता जाँचा जा रहा है…",
+  "SIMULATED FINGERPRINT DID NOT MATCH": "सिमुलेटेड फिंगरप्रिंट मेल नहीं खाया",
+  "That is okay. You have options.": "कोई बात नहीं। आपके पास विकल्प हैं।",
+  "This prototype intentionally forces a fingerprint failure for this demo account, so you can see the available alternatives.": "यह प्रोटोटाइप इस डेमो खाते के लिए जानबूझकर फिंगरप्रिंट असफलता दिखाता है, ताकि आप उपलब्ध विकल्प देख सकें।",
+  "Try face & liveness": "चेहरा और लाइवनेस आज़माएँ",
+  "A short simulated camera step. No face matching happens.": "एक छोटा सिमुलेटेड कैमरा चरण। चेहरे का कोई मिलान नहीं होता।",
+  "Try this": "यह आज़माएँ",
+  "Ask family to help": "परिवार से सहायता माँगें",
+  "Share a low-friction link for assisted completion—not impersonation.": "सहायता से पूरा करने के लिए आसान लिंक साझा करें—किसी का रूप धारण करने के लिए नहीं।",
+  "Create link": "लिंक बनाएँ",
+  "Browse locations": "स्थान देखें",
+  "Prototype disclosure:": "प्रोटोटाइप सूचना:",
+  "These are simulated options. No real biometrics, camp schedules, SMS, voice calls, banks, or government systems are connected.": "ये सिमुलेटेड विकल्प हैं। कोई वास्तविक बायोमेट्रिक, शिविर समय-सारिणी, SMS, वॉइस कॉल, बैंक या सरकारी प्रणाली नहीं जुड़ी है।",
+  "SIMULATED FACE & LIVENESS": "सिमुलेटेड चेहरा और लाइवनेस",
+  "A small live moment.": "एक छोटा लाइव क्षण।",
+  "We can show your camera preview, but no face image is recorded or matched. This is a timed visual simulation only.": "हम कैमरा पूर्वावलोकन दिखा सकते हैं, लेकिन चेहरे की कोई छवि रिकॉर्ड या मिलान नहीं की जाती। यह केवल समयबद्ध दृश्य सिमुलेशन है।",
+  "Allow camera preview": "कैमरा पूर्वावलोकन की अनुमति दें",
+  "Continue without a camera": "कैमरे के बिना आगे बढ़ें",
+  "Complete simulated liveness": "सिमुलेटेड लाइवनेस पूरा करें",
+  "FAMILY ASSIST": "परिवार सहायता",
+  "Share support, not your identity.": "सहायता साझा करें, अपनी पहचान नहीं।",
+  "This link lets a family member complete a synthetic assistance step. It is explicitly a prototype, not a secure or production-ready verification method.": "यह लिंक परिवार के सदस्य को कृत्रिम सहायता चरण पूरा करने देता है। यह स्पष्ट रूप से प्रोटोटाइप है, सुरक्षित या उत्पादन-तैयार सत्यापन विधि नहीं।",
+  "FAMILY-ASSIST LINK": "परिवार-सहायता लिंक",
+  "Copy link": "लिंक कॉपी करें",
+  "Return to pensioner status": "पेंशनभोगी स्थिति पर लौटें",
+  "View mock camps": "मॉक शिविर देखें",
+  "ASSISTED PROTOTYPE": "सहायता प्रोटोटाइप",
+  "A small moment of help can make a big difference.": "सहायता का छोटा क्षण बड़ा अंतर ला सकता है।",
+  "You are assisting a family member. This prototype is not a secure identity-verification method and must never be used to impersonate anyone.": "आप परिवार के सदस्य की सहायता कर रहे हैं। यह प्रोटोटाइप सुरक्षित पहचान-सत्यापन विधि नहीं है और इसका उपयोग कभी भी किसी का रूप धारण करने के लिए नहीं होना चाहिए।",
+  "Yearly certificate support": "वार्षिक प्रमाणपत्र सहायता",
+  "ASSISTING, NOT IMPERSONATING": "सहायता कर रहे हैं, रूप धारण नहीं",
+  "A quick shared-memory check.": "एक त्वरित साझा-स्मृति जाँच।",
+  "Complete assisted verification": "सहायता सत्यापन पूरा करें",
+  "Support completed.": "सहायता पूरी हुई।",
+  "Kamala ji’s prototype status has updated. The pensioner window will reflect this automatically within a few seconds.": "कमला जी की प्रोटोटाइप स्थिति अपडेट हो गई है। पेंशनभोगी विंडो कुछ सेकंड में यह बदलाव दिखाएगी।",
+  "Your prototype submission is complete.": "आपका प्रोटोटाइप जमा पूरा हो गया है।",
+  "SYNTHETIC PROTOTYPE — NOT A GOVERNMENT CERTIFICATE": "कृत्रिम प्रोटोटाइप — सरकारी प्रमाणपत्र नहीं",
+  "Verification path": "सत्यापन मार्ग",
+  "Status": "स्थिति",
+  "Marked complete in demo": "डेमो में पूर्ण चिह्नित",
+  "Save image": "छवि सहेजें",
+  "Set mock reminders": "मॉक अनुस्मारक सेट करें",
+  "Share status": "स्थिति साझा करें",
+  "Illustrative help near you.": "आपके पास उदाहरणात्मक सहायता।",
+  "MOCK PINCODE": "मॉक पिनकोड",
+  "MOCK DISTANCE VIEW": "मॉक दूरी दृश्य",
+  "A gentle nudge, on your terms.": "आपकी शर्तों पर एक सौम्य याद दिलाना।",
+  "Mock SMS reminder": "मॉक SMS अनुस्मारक",
+  "Mock voice-call reminder": "मॉक वॉइस-कॉल अनुस्मारक",
+  "Also remind a family member": "परिवार के सदस्य को भी याद दिलाएँ",
+  "Save mock preferences": "मॉक पसंद सहेजें",
+  "HONESTY DISCLOSURE": "ईमानदारी सूचना",
+  "Designed to make the limits unmistakably clear.": "सीमाओं को बिल्कुल स्पष्ट करने के लिए डिज़ाइन किया गया।",
+  "What you are seeing": "आप क्या देख रहे हैं",
+  "What is simulated": "क्या सिमुलेटेड है",
+  "At scale, for real": "वास्तविक स्तर पर",
+  "Independent prototype. No government, bank, biometric, or messaging system is connected.": "स्वतंत्र प्रोटोटाइप। कोई सरकारी, बैंक, बायोमेट्रिक या संदेश प्रणाली नहीं जुड़ी है।",
+  "Read the full mock-data disclosure": "पूर्ण मॉक-डेटा सूचना पढ़ें",
 };
 
 function Button({ children, onClick, variant = "primary", icon: Icon, disabled = false, className = "" }: {
@@ -130,9 +244,9 @@ function AppMark({ className = "" }: { className?: string }) { return <span clas
 export default function Home() {
   const initialAssist = new URLSearchParams(window.location.search).get("assist");
   const [screen, setScreenState] = useState<Screen>(initialAssist ? "home" : "landing");
-  const [lang, setLang] = useState<Lang>("en");
-  const [large, setLarge] = useState(false);
-  const [contrast, setContrast] = useState(false);
+  const [lang, setLang] = useState<Lang>(() => localStorage.getItem("sahara-pramaan-language") === "hi" ? "hi" : "en");
+  const [large, setLarge] = useState(() => localStorage.getItem("sahara-pramaan-large-type") === "true");
+  const [contrast, setContrast] = useState(() => localStorage.getItem("sahara-pramaan-high-contrast") === "true");
   const [pensionerId, setPensionerId] = useState<string | null>(null);
   const [assistToken, setAssistToken] = useState(initialAssist);
   const [verificationMethod, setVerificationMethod] = useState<"fingerprint" | "liveness" | "family" | undefined>();
@@ -144,8 +258,8 @@ export default function Home() {
   const [linkCreated, setLinkCreated] = useState<{ token: string; code: string } | null>(null);
 
   const copy = text[lang];
-  const profileQuery = trpc.prototype.pensioner.useQuery({ pensionerId: pensionerId || "pensioner-demo-fail" }, { enabled: Boolean(pensionerId), refetchInterval: screen === "home" && pensionerId ? 2000 : false });
-  const familyQuery = trpc.prototype.familyLink.useQuery({ token: assistToken || "inactive" }, { enabled: Boolean(assistToken), refetchInterval: assistToken ? 2000 : false });
+  const profileQuery = trpc.prototype.pensioner.useQuery({ pensionerId: pensionerId || "pensioner-demo-fail" }, { enabled: Boolean(pensionerId), refetchInterval: screen === "home" && pensionerId ? FAMILY_STATUS_POLL_MS : false });
+  const familyQuery = trpc.prototype.familyLink.useQuery({ token: assistToken || "inactive" }, { enabled: Boolean(assistToken), refetchInterval: assistToken ? FAMILY_STATUS_POLL_MS : false });
   const campsQuery = trpc.prototype.camps.useQuery({ pincode });
   const loginMutation = trpc.prototype.login.useMutation();
   const fingerprintMutation = trpc.prototype.fingerprint.useMutation();
@@ -163,6 +277,35 @@ export default function Home() {
   useEffect(() => {
     if (familyQuery.data) setLang(familyQuery.data.profile.preferredLanguage);
   }, [familyQuery.data]);
+
+  useEffect(() => {
+    localStorage.setItem("sahara-pramaan-language", lang);
+    localStorage.setItem("sahara-pramaan-large-type", String(large));
+    localStorage.setItem("sahara-pramaan-high-contrast", String(contrast));
+  }, [lang, large, contrast]);
+
+  useEffect(() => {
+    const root = document.querySelector("#root");
+    if (!root) return;
+    const reverseDictionary = Object.fromEntries(Object.entries(hindiDisplay).map(([english, hindi]) => [hindi, english]));
+    const translate = (value: string) => {
+      const leading = value.match(/^\s*/)?.[0] || "";
+      const trailing = value.match(/\s*$/)?.[0] || "";
+      const key = value.trim();
+      const english = reverseDictionary[key] || key;
+      return `${leading}${lang === "hi" ? hindiDisplay[english] || english : english}${trailing}`;
+    };
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes: Text[] = [];
+    let node: Node | null;
+    while ((node = walker.nextNode())) nodes.push(node as Text);
+    nodes.forEach(textNode => { textNode.textContent = translate(textNode.textContent || ""); });
+    root.querySelectorAll<HTMLInputElement>("input[placeholder]").forEach(input => {
+      const placeholder = input.getAttribute("placeholder") || "";
+      const english = reverseDictionary[placeholder] || placeholder;
+      input.setAttribute("placeholder", lang === "hi" ? hindiDisplay[english] || english : english);
+    });
+  }, [lang, screen, pensionerId, assistToken]);
 
   const profile = profileQuery.data?.profile;
   const state = profileQuery.data?.state;
@@ -288,6 +431,7 @@ export default function Home() {
   </section>;
 
   return <Shell screen={screen} setScreen={setScreen} lang={lang} setLang={setLang} large={large} setLarge={setLarge} contrast={contrast} setContrast={setContrast} onReset={resetDemo}>
+    {screen === "home" && !profile && !isAssist && <section className="mx-auto flex w-full max-w-6xl flex-1 items-center py-5 sm:py-10"><div className="grid w-full gap-5 lg:grid-cols-[1.3fr_.7fr]"><div className="min-h-[360px] rounded-[32px] bg-sahara-ink p-7 shadow-lift sm:p-9"><span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white"><RefreshCw className="h-3.5 w-3.5 animate-spin text-sahara-sun"/>OPENING YOUR SYNTHETIC STATUS</span><div className="mt-16 max-w-xl animate-pulse"><div className="h-4 w-36 rounded-full bg-white/15"/><div className="mt-5 h-12 w-full max-w-md rounded-2xl bg-white/10"/><div className="mt-3 h-12 w-4/5 rounded-2xl bg-white/10"/><div className="mt-9 h-12 w-44 rounded-2xl bg-sahara-sun/40"/></div></div><div className="min-h-[220px] rounded-[30px] bg-white p-6 shadow-sm"><div className="h-10 w-10 animate-pulse rounded-2xl bg-sahara-mist"/><div className="mt-6 h-5 w-40 animate-pulse rounded-full bg-sahara-mist"/><div className="mt-3 h-16 w-full animate-pulse rounded-2xl bg-sahara-mist"/></div></div></section>}
     {activeScreen === "family" ? familyScreen : <>
       {screen === "landing" && <section className="relative flex flex-1 items-center py-6 sm:py-10"><div className="grid w-full items-center gap-10 lg:grid-cols-[1.08fr_.92fr] lg:gap-16"><div className="page-enter max-w-2xl"><div className="inline-flex items-center gap-2 rounded-full border border-sahara-forest/15 bg-white/70 px-3 py-2 text-[11px] font-bold uppercase tracking-[.11em] text-sahara-forest"><span className="h-2 w-2 rounded-full bg-sahara-sun pulse-soft"/>{copy.prototype}</div><h1 className="font-display mt-7 text-5xl leading-[.96] tracking-[-.065em] text-sahara-ink sm:text-6xl lg:text-7xl">A more <em className="font-display text-sahara-forest">human</em> way to stay on track.</h1><p className="mt-7 max-w-xl text-[18px] leading-8 text-slate-600 sm:text-xl">{copy.welcome} Built with large, calm steps for pensioners—and a simple family-assist route when an extra hand is needed.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><Button variant="sun" onClick={() => setScreen("login")} icon={ArrowRight}>{copy.begin}</Button><Button variant="light" onClick={() => toast.message("Use DEMO-FAIL / 123456 to show the fallback journey, or DEMO-PASS / 123456 to show fingerprint success.")}>{copy.demo}</Button></div><div className="mt-9 grid max-w-xl grid-cols-3 gap-3"><div className="rounded-2xl bg-white/70 p-3 inset-glow"><Fingerprint className="h-5 w-5 text-sahara-coral"/><p className="mt-3 text-sm font-bold">Alternative paths</p></div><div className="rounded-2xl bg-white/70 p-3 inset-glow"><UsersRound className="h-5 w-5 text-sahara-forest"/><p className="mt-3 text-sm font-bold">Family assistance</p></div><div className="rounded-2xl bg-white/70 p-3 inset-glow"><Accessibility className="h-5 w-5 text-sahara-coral"/><p className="mt-3 text-sm font-bold">Comfort controls</p></div></div></div><div className="relative mx-auto w-full max-w-lg float-gentle"><div className="absolute -left-5 top-14 hidden rounded-2xl bg-white p-3 shadow-lift sm:block"><span className="flex items-center gap-2 text-xs font-bold text-sahara-forest"><Check className="h-4 w-4 rounded-full bg-emerald-100 p-0.5"/>Plain-language status</span></div><div className="relative overflow-hidden rounded-[34px] bg-sahara-ink p-4 shadow-2xl shadow-sahara-ink/25"><div className="rounded-[25px] bg-sahara-cream p-5 sm:p-7"><div className="flex items-center justify-between"><AppMark className="h-10 w-10"/><span className="rounded-full bg-sahara-sun/20 px-3 py-1.5 text-[10px] font-bold tracking-[.09em] text-sahara-ink">DUE THIS MONTH</span></div><p className="mt-8 text-sm font-bold text-slate-500">GOOD MORNING, KAMALA JI</p><h2 className="font-display mt-2 text-4xl leading-tight tracking-[-.045em]">Your yearly step is ready when you are.</h2><div className="mt-8 rounded-[22px] bg-white p-4 shadow-sm"><div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-sahara-mint text-sahara-forest"><ClipboardCheck className="h-5 w-5"/></span><span><span className="block text-xs font-bold text-slate-500">NEXT STEP</span><span className="block font-bold">Verify your life certificate</span></span></div><div className="mt-4 h-2 rounded-full bg-sahara-mist"><div className="h-2 w-1/3 rounded-full bg-sahara-forest"/></div></div><Button variant="primary" className="mt-5 w-full">Continue gently <ArrowRight className="h-[18px] w-[18px]"/></Button></div></div><div className="absolute -bottom-5 -right-4 rounded-2xl bg-sahara-sun p-4 text-sahara-ink shadow-lift"><span className="block text-[10px] font-bold uppercase tracking-[.12em]">Built for</span><span className="font-display block text-xl font-semibold">everyday ease</span></div></div></div></section>}
       {screen === "login" && <section className="mx-auto flex w-full max-w-6xl flex-1 items-center py-5 sm:py-10"><div className="grid w-full overflow-hidden rounded-[34px] border border-sahara-ink/10 bg-white shadow-lift lg:grid-cols-[.8fr_1.2fr]"><aside className="relative overflow-hidden bg-sahara-forest p-7 text-white sm:p-10"><div className="absolute inset-0 opacity-20 paper-noise"/><div className="relative"><span className="grid h-12 w-12 place-items-center rounded-2xl bg-sahara-sun text-sahara-ink"><ShieldCheck className="h-6 w-6"/></span><h1 className="font-display mt-8 text-4xl leading-[1.02] tracking-[-.045em]">A simple start, with no real data.</h1><p className="mt-5 max-w-sm leading-7 text-white/75">This is a synthetic login for a public prototype. It does not connect to any real pension, bank, identity, or messaging system.</p><div className="mt-10 space-y-3"><div className="rounded-2xl bg-white/10 p-4"><p className="text-xs font-bold tracking-[.1em] text-white/60">FALLBACK DEMO</p><p className="mt-1 font-bold">DEMO-FAIL · OTP 123456</p></div><div className="rounded-2xl bg-white/10 p-4"><p className="text-xs font-bold tracking-[.1em] text-white/60">FINGERPRINT-PASS DEMO</p><p className="mt-1 font-bold">DEMO-PASS · OTP 123456</p></div></div></div></aside><div className="p-7 sm:p-10"><button onClick={() => setScreen("landing")} className="inline-flex min-h-11 items-center gap-2 text-sm font-bold text-sahara-forest hover:underline"><ArrowLeft className="h-4 w-4"/>Back</button><h2 className="font-display mt-7 text-4xl tracking-[-.045em]">{copy.login}</h2><p className="mt-3 max-w-lg leading-7 text-slate-600">Enter a synthetic ID and mock OTP. For the best recording flow, keep the pre-filled forced-failure account.</p><label className="mt-8 block text-sm font-bold text-sahara-ink">{copy.identifier}<input value={identifier} onChange={e => setIdentifier(e.target.value)} className="mt-2 min-h-14 w-full rounded-2xl border border-sahara-ink/15 bg-sahara-cream px-4 outline-none transition focus:border-sahara-forest" /></label><label className="mt-5 block text-sm font-bold text-sahara-ink">{copy.otp}<input inputMode="numeric" maxLength={6} value={otp} onChange={e => setOtp(e.target.value)} className="mt-2 min-h-14 w-full rounded-2xl border border-sahara-ink/15 bg-sahara-cream px-4 tracking-[.25em] outline-none transition focus:border-sahara-forest" /></label><Button className="mt-8 w-full" icon={ArrowRight} onClick={handleLogin} disabled={loginMutation.isPending}>{loginMutation.isPending ? "Opening your demo…" : copy.continue}</Button><p className="mt-5 text-center text-xs leading-5 text-slate-500">{copy.noMessages} By continuing, you acknowledge the independent-prototype disclosure.</p></div></div></section>}

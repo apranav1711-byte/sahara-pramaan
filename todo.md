@@ -2,25 +2,33 @@
 
 - [x] Establish the Sahara Pramaan visual system: refined typography, color tokens, motion principles, accessible contrast, responsive spacing, and prototype disclosure treatment.
 - [x] Define and document the synthetic prototype domain model for pensioners, family assistants, verification attempts, camp locations, reminder preferences, confirmation references, and demo reset state.
-- [ ] Configure Supabase-backed persistence for synthetic prototype records and family-assist verification status only.
+- [x] Configure Supabase-backed persistence for synthetic prototype records and family-assist verification status only.
 - [x] Build the public landing page with a clear independent-prototype disclosure and mobile-first responsive layout.
 - [x] Build synthetic mock login with deterministic `DEMO-FAIL` and `DEMO-PASS` accounts and six-digit mock OTP handling.
 - [x] Build the pensioner home with plain-language certificate status, large touch targets, and clear primary actions.
 - [x] Build deterministic simulated fingerprint pass/fail verification states with visible mock-status language.
 - [x] Build simulated face/liveness verification with webcam permission handling and a camera-denied fallback.
 - [x] Build a synthetic confirmation artifact with a prominent non-official prototype watermark and download/share action.
-- [ ] Build the public family-assist link/code flow with an explicit prototype-not-secure disclaimer.
-- [ ] Implement reliable two-window family-assist status synchronization and a visible update state within five seconds.
+- [x] Build the public family-assist link/code flow with an explicit prototype-not-secure disclaimer.
+- [x] Implement reliable two-window family-assist status synchronization and a visible update state within five seconds.
 - [x] Build the illustrative mock camp locator with mock pincode sorting and accessibility-friendly results.
 - [x] Build mock reminder preferences while clearly confirming that no real messages or calls are sent.
 - [ ] Implement Hindi and English translations across all core user journeys.
 - [ ] Implement read-aloud controls, large-text mode, high-contrast mode, keyboard focus states, and reduced-motion support.
 - [x] Build the complete in-app “How this works” disclosure page with limitations and realistic scale-up requirements.
 - [x] Add deterministic demo-reset controls and document the recording-ready test flow.
-- [ ] Create README documentation covering setup, synthetic data, demo credentials, QA, limitations, reset procedure, and architecture.
-- [ ] Create and maintain a public GitHub repository containing the complete source and documentation.
+- [x] Create README documentation covering setup, synthetic data, demo credentials, QA, limitations, reset procedure, and architecture.
+- [ ] Export the complete source and documentation to the public GitHub repository through the project’s GitHub management panel after the final checkpoint.
 - [x] Write and run Vitest coverage for critical deterministic verification and family-assist state behavior.
-- [ ] Verify visual quality through desktop and mobile screenshots, including 360px responsive behavior.
+- [x] Verify visual quality through desktop and mobile screenshots, including 360px responsive behavior.
+- [ ] Verify the real two-window family-assist flow by keeping the pensioner window open, completing family assistance in a second window, and confirming the first window visibly changes within five seconds.
+- [x] Document or test the client polling behavior that supports the automatic cross-window family status refresh.
+- [ ] Re-run the live two-window QA with timestamped evidence of the first visible submitted-state change occurring within five seconds.
+- [ ] Run a browser-based second-window family-assist submission and retain timestamped evidence from both browser windows before final checkpointing.
+- [ ] Implement explicit Hindi and English copy coverage for every core screen and verify both languages in the browser.
+- [ ] Implement and verify keyboard-visible focus styles and prefers-reduced-motion behavior across interactive controls.
+- [x] Capture and review the landing experience at a 360px viewport and address any responsive or touch-target regressions.
+- [x] Record explicit 360px findings for overflow, primary touch targets, navigation controls, and content-card readability.
 - [ ] Deploy the public application to Vercel and verify the production URL, credentials, accessibility controls, and two-window flow.
 - [ ] Send a concise project-completion email once the public deployment and QA milestone are complete.
 - [ ] Defer final video generation until the user supplies the screen-recording walkthrough.
