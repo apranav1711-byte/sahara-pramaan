@@ -176,6 +176,7 @@ const hindiDisplay: Record<string, string> = {
   "Also remind a family member": "परिवार के सदस्य को भी याद दिलाएँ",
   "A simulated family-support preference": "एक सिमुलेटेड परिवार-सहायता पसंद",
   "Saving mock preference…": "मॉक पसंद सहेजी जा रही है…",
+  "Mock preferences saved. No message will be sent.": "मॉक पसंद सहेज ली गईं। कोई संदेश नहीं भेजा जाएगा।",
   "Save mock preferences": "मॉक पसंद सहेजें",
   "HONESTY DISCLOSURE": "ईमानदारी सूचना",
   "Designed to make the limits unmistakably clear.": "सीमाओं को बिल्कुल स्पष्ट करने के लिए डिज़ाइन किया गया।",
