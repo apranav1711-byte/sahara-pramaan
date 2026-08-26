@@ -167,6 +167,8 @@ const hindiDisplay: Record<string, string> = {
   "A gentle nudge, on your terms.": "आपकी शर्तों पर एक सौम्य याद दिलाना।",
   "Choose how this synthetic prototype would remind Kamala Devi. These controls only save mock preferences—no SMS, phone call, or family alert will be sent.": "चुनें कि यह कृत्रिम प्रोटोटाइप कमला देवी को कैसे याद दिलाएगा। ये नियंत्रण केवल मॉक पसंद सहेजते हैं—कोई SMS, फोन कॉल या परिवार सूचना नहीं भेजी जाएगी।",
   "Choose how this synthetic prototype would remind Ramesh Kumar. These controls only save mock preferences—no SMS, phone call, or family alert will be sent.": "चुनें कि यह कृत्रिम प्रोटोटाइप रमेश कुमार को कैसे याद दिलाएगा। ये नियंत्रण केवल मॉक पसंद सहेजते हैं—कोई SMS, फोन कॉल या परिवार सूचना नहीं भेजी जाएगी।",
+  "Choose how this synthetic prototype would remind": "चुनें कि यह कृत्रिम प्रोटोटाइप कैसे याद दिलाएगा",
+  ". These controls only save mock preferences—no SMS, phone call, or family alert will be sent.": ". ये नियंत्रण केवल मॉक पसंद सहेजते हैं—कोई SMS, फोन कॉल या परिवार सूचना नहीं भेजी जाएगी।",
   "Mock SMS reminder": "मॉक SMS अनुस्मारक",
   "A simulated text reminder preference": "एक सिमुलेटेड टेक्स्ट अनुस्मारक पसंद",
   "Mock voice-call reminder": "मॉक वॉइस-कॉल अनुस्मारक",
