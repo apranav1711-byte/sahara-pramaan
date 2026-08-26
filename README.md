@@ -6,7 +6,7 @@
 
 ## What works today
 
-The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes a synthetic confirmation image, illustrative support locator, persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, Hindi/English switching, browser-native read-aloud controls, installable PWA assets, and a local offline shell.
+The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, light/dark themes, a preferred-language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud controls with an immediate stop action, installable PWA assets, and a local offline shell.
 
 | Journey | Demonstration behavior |
 | --- | --- |
@@ -43,9 +43,13 @@ Supabase is used only for the synthetic state required for the public two-window
 | `sp_family_assist_links` | Stores synthetic family-assist demo tokens and completion state. | Not a real authorization or identity-assurance mechanism. |
 | `sp_reminder_preferences` | Stores synthetic in-app reminder preferences. | No real SMS, voice call, email, or family notification is ever sent. |
 
+## India-first location behavior
+
+The locator accepts a six-digit Indian PIN code for synthetic postal-area sorting and validates the input as numeric. It also offers an optional browser location permission action for a more relevant nearby experience and displays the device-reported accuracy for the current session without storing coordinates. A PIN code cannot identify an exact household location; a future DIGIPIN integration would require a separate official specification and privacy review.
+
 ## Demo reset
 
-Open the top-right menu and choose **Reset synthetic demo**. This clears the synthetic Supabase state and local fallback state, returns the app to the landing page, and makes a fresh recording take possible. Use the reset before each video recording attempt.
+Open the top-right menu and choose **Reset synthetic demo**. This clears the synthetic Supabase state and local fallback state, returns the app to the landing page, and makes a fresh recording take possible. Use the reset before each video recording attempt. The menu also contains the preferred-language selector, light/dark theme control, guided-mode switch, read-aloud action, and stop-reading action.
 
 ## Local development
 
@@ -78,7 +82,7 @@ The final demo video is intentionally deferred until the project owner supplies 
 
 ## Release handoff
 
-The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
+The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
 
 ## Tooling disclosure
 

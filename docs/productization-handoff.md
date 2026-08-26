@@ -15,10 +15,10 @@ The product does not connect to government, UIDAI, India Post, banks, pension au
 | Landing and onboarding | Clear service positioning, synthetic-data disclosure, demo-account chooser, and calm primary action. |
 | Pensioner journey | Synthetic login, plain-language due status, fingerprint pass/fail routes, liveness fallback, family assistance, camp locator, confirmation, reminders, and reset. |
 | Family assistance | Shareable synthetic link, second-window flow, contextual guided instruction, polling only while pending, 24-hour expiry, five-attempt limit, and explicit non-impersonation language. |
-| Accessibility | Large-type mode, high contrast, English/Hindi switching, browser-native read-aloud, context-aware guided instructions, repeat-instruction control, semantic status regions, keyboard-friendly controls, and zoom-friendly viewport configuration. |
+| Accessibility | Large-type mode, high contrast, a preferred-language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud with immediate stop, context-aware guided instructions, repeat-instruction control, semantic status regions, keyboard-friendly controls, and zoom-friendly viewport configuration. |
 | Resilience | Supabase-backed synthetic state, deterministic local fallback, session-only persistence banner, offline browser state banner, reset cleanup, and network-first service-worker shell. |
 | Installability | Web manifest, lightweight brand icon, standalone display metadata, and service-worker registration in production. |
-| Performance | React and UI vendor chunks are separated from the application bundle. The family polling interval stops once the state is submitted. |
+| Performance | React and UI vendor chunks are separated from the application bundle. The family polling interval stops once the state is submitted. The primary confirmation journey keeps the lighter PDF and share actions and no longer offers image export. |
 | QA | Type checking, Vitest unit coverage, production smoke testing, direct Supabase smoke testing, and manual browser verification of landing, login, status, fallback, family-link, and Hindi screens. |
 
 ## Repository map
@@ -47,7 +47,7 @@ pnpm install
 pnpm dev
 ```
 
-The development server runs the Vite client and the local server adapter. The local fallback store is deterministic and synthetic. It is not intended to be used as production storage.
+The development server runs the Vite client and the local server adapter. The local fallback store is deterministic and synthetic. It is not intended to be used as production storage. The language selector stores the user’s preferred Indian language locally; Hindi has the deepest static translation coverage and the remaining choices preserve the selection while using the English fallback for screens not yet translated.
 
 ## Verification commands
 
@@ -65,6 +65,10 @@ SMOKE_BASE_URL=https://your-deployment.vercel.app pnpm test:production
 ```
 
 The production smoke suite checks the manifest, service worker, synthetic login, camp list, family-link creation, reminder write/readback, and synthetic reset cleanup.
+
+## Authentication and messaging decision
+
+The current app keeps the deterministic synthetic login so the hackathon journey is reliable without collecting real personal data. Google Sign-In can be added as a real account layer only after a Google Web OAuth client is created, authorized origins and redirect behavior are configured, ID tokens are validated server-side, and privacy/consent copy is approved. WhatsApp OTP is not a simple client-side feature: it requires a Meta WhatsApp Business Platform setup, a verified sender, approved localized authentication templates, opt-in, secure server credentials, delivery handling, rate limits, and a reset/recovery path. No provider credentials are configured in this project, so neither live Google nor WhatsApp authentication is fabricated.
 
 ## Supabase operating procedure
 
@@ -90,11 +94,11 @@ pnpm build:vercel
 
 The command builds the Vite client and overwrites the committed `api/[...path].js` tRPC catch-all bundle. This output path must remain aligned with the rewrite in `vercel.json`; otherwise Vercel can successfully build while serving an older committed server bundle.
 
-The public alias is [sahara-pramaan.vercel.app](https://sahara-pramaan.vercel.app). After every production push, verify the deployment is Ready and run the smoke command against the public alias.
+The public alias is [sahara-pramaan.vercel.app](https://sahara-pramaan.vercel.app). After every production push, verify the deployment is Ready and run the smoke command against the public alias. The camp locator accepts a six-digit Indian PIN code for synthetic area sorting and offers optional browser geolocation consent; it must never claim a PIN code is an exact household location.
 
 ## Recording and acceptance checklist
 
-Use `DEMO-FAIL` with mock OTP `123456` for the primary journey. Confirm that the fingerprint fallback shows liveness, family assistance, and illustrative support-location alternatives. Create a family link and open it in a second window. Verify that the pensioner window updates after the family answer is completed. Visit reminders and confirm that saved mock settings remain after a fresh pensioner read. Test Hindi, guided instructions, read-aloud, large type, high contrast, zoom, and the camera-denied liveness route. Complete one confirmation image and PDF export, then run reset.
+Use `DEMO-FAIL` with mock OTP `123456` for the primary journey. Confirm that the fingerprint fallback shows liveness, family assistance, and illustrative support-location alternatives. Create a family link and open it in a second window. Verify that the pensioner window updates after the family answer is completed. Visit reminders and confirm that saved mock settings remain after a fresh pensioner read. Test Hindi, guided instructions, read-aloud, large type, high contrast, zoom, and the camera-denied liveness route. Complete one confirmation PDF export and share action, then run reset.
 
 The final screen recording must say that the service is independent and synthetic, must not imply an official certificate or live status, and must not show real personal information. The two-window family-assist flow must be described as assistance, not identity verification.
 
