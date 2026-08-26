@@ -19,7 +19,7 @@ The product does not connect to government, UIDAI, India Post, banks, pension au
 | Resilience | Supabase-backed synthetic state, deterministic local fallback, session-only persistence banner, offline browser state banner, reset cleanup, and network-first service-worker shell. |
 | Installability | Web manifest, lightweight brand icon, standalone display metadata, and service-worker registration in production. |
 | Performance | React and UI vendor chunks are separated from the application bundle. The family polling interval stops once the state is submitted. The primary confirmation journey keeps the lighter PDF and share actions and no longer offers image export. |
-| QA | Type checking, Vitest unit coverage, production smoke testing, direct Supabase smoke testing, and manual browser verification of landing, login, status, fallback, family-link, and Hindi screens. |
+| QA | Type checking, Vitest unit coverage, production smoke testing, direct Supabase smoke testing, manual browser verification of landing, login, status, fallback, family-link, Kannada, Bengali, and the ten-locale critical-path rendering. |
 
 ## Repository map
 

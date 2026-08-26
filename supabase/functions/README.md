@@ -7,7 +7,7 @@ These two Edge Functions provide the synthetic persistence layer for the public 
 | `sahara-pramaan-prototype` | Synthetic login, pensioner state, fingerprint/liveness outcomes, family-link creation, mock reminders, camp data, and reset. |
 | `sahara-pramaan-family-assist` | Synthetic family-link read and shared-memory answer verification. |
 
-The functions use the Supabase service role only inside the Edge Runtime to access the three RLS-protected synthetic tables. They contain no government, identity, biometric, financial, messaging, or real pension integrations.
+The functions use the Supabase service role only inside the Edge Runtime to access the three RLS-protected synthetic tables. They contain no government, identity, biometric, financial, messaging, or real pension integrations. Support-location discovery is handled separately by the app server’s typed `prototype.liveLocations` procedure through the secure Maps proxy; it does not write device coordinates or live Places results to Supabase.
 
 `verify_jwt` is intentionally disabled for these functions because the public recording flow must be able to open a family-assist link without a Supabase account. Synthetic family links now expire after 24 hours and reject answers after five incorrect attempts; these controls are demo-safety boundaries, not identity assurance. A production implementation must replace this arrangement with audited authorization, expiring signed links, rate limits, abuse monitoring, and a real consent and identity-assurance design.
 

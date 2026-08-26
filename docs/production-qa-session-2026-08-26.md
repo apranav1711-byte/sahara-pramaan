@@ -1,5 +1,7 @@
 # Production QA Session — 26 August 2026
 
+> **Historical evidence log:** This record contains checkpoint-specific observations from earlier releases. The final-release addendum at the end and [`docs/judge-submission.md`](./judge-submission.md) are authoritative for the current build. Older references to English fallback, image export, or previous deployment hashes are retained only as historical evidence.
+
 ## Scope
 
 This record describes the final production verification of Sahara Pramaan’s **independent, synthetic-only** public prototype. It is deliberately limited to facts observed in the public GitHub and Vercel releases, synthetic demonstration interactions, and repeatable local source validation. It does not treat illustrative state, mock credentials, or browser automation limitations as evidence of a real pension, biometric, government, financial, or messaging service.
@@ -44,3 +46,11 @@ The only deliberately deferred deliverable is the final demo video. It must not 
 | Final source commit | https://github.com/apranav1711-byte/sahara-pramaan/commit/9e2d1789e5a241b903ffca02d89de42368167fd7 |
 | Deployment-specific build | https://sahara-pramaan-1aqjtuf4w-pranav-aggarwals-projects-c0ba8f4d.vercel.app |
 | Public alias | https://sahara-pramaan.vercel.app |
+
+## Final Release Addendum — 27 August 2026
+
+This document contains historical production evidence from earlier commits as well as the final-release reconciliation below. The historical sections that mention English fallback, English/Hindi-only coverage, image export, or older deployment hashes should not be read as descriptions of the current build.
+
+The current judge-facing release is GitHub commit `63e8637` with READY Vercel deployment `dpl_5BsbWR3xSP8zSf7baTnXqMdxntsu`. Its public smoke suite passed the manifest, service worker, synthetic login, camp list, live-or-synthetic support locations, family-link creation, reminder write/readback, and reset checks. The support-location response was `source: "synthetic"` in the current provider environment; live Google Places data is therefore not claimed as observed evidence.
+
+The current client renders critical-path copy in ten supported languages through explicit React locale dictionaries. Kannada was visually verified on the deployed landing and login journeys, including translated shell controls, preview labels, onboarding copy, and authentication disclosure. The current confirmation route retains PDF/share actions and does not offer image export. The current test suite contains 7 files and 16 passing tests.

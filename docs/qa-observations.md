@@ -1,5 +1,7 @@
 # QA Observations
 
+> **Historical QA log:** The entries below are point-in-time preview observations. The current release reconciliation is at the end of this file and the judge-facing source of truth is [`docs/judge-submission.md`](./judge-submission.md). Do not use older English/Hindi-only, decorative-locator, or image-export wording as a description of the current build.
+
 ## Development Preview — Initial Check
 
 The public landing screen loads without a login wall and visibly presents the independent-prototype disclosure. The primary call to action leads to the synthetic login screen. The fallback demo account is prefilled as `DEMO-FAIL` with mock OTP `123456`, and the login screen clearly labels its synthetic-data constraints.
@@ -58,7 +60,7 @@ After the accessibility persistence update, the public landing page and determin
 
 ## Development Preview — Mock Camp Locator Check
 
-The camp locator opens from the pensioner home and displays a clear mock-pincode field, decorative non-geographic map, and synthetic camp cards sorted by illustrative distance. The visible copy states that a family member, volunteer, or assisted device can use the locator and that locations and distances are not live service information.
+The earlier preview locator opened from the pensioner home with a clear mock-pincode field, decorative non-geographic map, and synthetic camp cards sorted by illustrative distance. This is historical evidence only; the current release uses the live-or-synthetic support locator documented in the final-release reconciliation below.
 
 Changing the mock pincode from `110001` to `110075` changes the displayed camp ordering, with Sukoon Community Hall moving to the nearest illustrative position. The return path leads back to the pensioner home without losing the shared synthetic status.
 
@@ -143,3 +145,11 @@ The second page began completion at `13:44:11.049Z`, rendered **Support complete
 ## Direct Accessibility Evidence — 26 August 2026
 
 The same exact production build was tested in Chromium with `prefers-reduced-motion: reduce` emulated. The media query matched and computed animation durations for both `.float-gentle` and `.page-enter` were `0.00001s`, demonstrating that the reduced-motion rule took effect. Keyboard `Tab` focus reached the branded home button and computed a visible `3px` solid focus outline. The public **Read this aloud** button invoked the browser speech-synthesis method once under a controlled instrumentation shim. This verifies invocation, not physical audio output from the sandbox.
+
+## Final Release Reconciliation — 27 August 2026
+
+The earlier sections in this file are point-in-time preview observations and should be read as historical evidence. The current release supersedes their English/Hindi-only localization and decorative-only locator wording. The final build uses explicit React locale dictionaries for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi across the primary shell, landing, login, status, accessibility, and locator journeys.
+
+The current locator accepts a validated six-digit Indian PIN or a consented coordinate pair. The server-side adapter attempts Google geocoding and nearby Places search through the authenticated Maps proxy. Live markers and Google Maps links are shown only when real provider results are returned. The current public smoke run returned `source: "synthetic"`, so the production evidence does not claim live Places data; synthetic fallback records remain visibly labeled.
+
+The current confirmation experience intentionally retains PDF and share actions and does not offer image export. The current public verification baseline is `pnpm check`, `pnpm test` with 7 files and 16 tests, `pnpm build:vercel`, and `pnpm test:production`. The latest GitHub release is `63e8637`, with a READY Vercel deployment recorded in [`docs/judge-submission.md`](./judge-submission.md).

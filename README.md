@@ -4,6 +4,10 @@
 
 > **Independent service concept — synthetic data only.** This project is not affiliated with the Government of India, UIDAI, India Post, any bank, or any pension authority. It does not connect to government, financial, biometric, messaging, or identity-verification systems.
 
+## Judge-facing submission brief
+
+For the complete problem statement, India-specific design rationale, architecture, reproducible demo route, evidence, limitations, and roadmap, start with [`docs/judge-submission.md`](./docs/judge-submission.md).
+
 ## What works today
 
 The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, light/dark themes, a fully rendered language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud controls with an immediate stop action, installable PWA assets, and a local offline shell.
@@ -84,7 +88,7 @@ The final demo video is intentionally deferred until the project owner supplies 
 
 ## Release handoff
 
-The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), [`docs/india-hackathon-roadmap.md`](./docs/india-hackathon-roadmap.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
+The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/judge-submission.md`](./docs/judge-submission.md), [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), [`docs/india-hackathon-roadmap.md`](./docs/india-hackathon-roadmap.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
 
 ## Tooling disclosure
 
