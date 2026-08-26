@@ -16946,7 +16946,14 @@ var appRouter = router({
 // server/vercel/trpc.ts
 var trpcVercelFunction = {
   async fetch(request2) {
-    const path = new URL(request2.url).pathname;
+    const originalUrl = new URL(request2.url);
+    const rewrittenProcedurePath = originalUrl.searchParams.get("trpcPath");
+    if (rewrittenProcedurePath) {
+      originalUrl.searchParams.delete("trpcPath");
+      originalUrl.pathname = `/api/trpc/${rewrittenProcedurePath}`;
+    }
+    const trpcRequest = rewrittenProcedurePath ? new Request(originalUrl, request2) : request2;
+    const path = originalUrl.pathname;
     if (!path.startsWith("/api/trpc")) {
       return Response.json(
         { error: "Synthetic prototype API route not found." },
@@ -16955,7 +16962,7 @@ var trpcVercelFunction = {
     }
     return fetchRequestHandler({
       endpoint: "/api/trpc",
-      req: request2,
+      req: trpcRequest,
       router: appRouter,
       createContext: () => ({
         req: request2,
