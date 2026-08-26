@@ -117,6 +117,6 @@ If a future change touches identity, biometrics, payment status, government reco
 | Productization checkpoint | `f7a9d10` |
 | Guided family polish | `c64057e` |
 | Final integration handoff | `810f6ee` |
-| Latest production deployment | Vercel Ready deployment from `810f6ee` |
+| Latest production deployment | Vercel READY deployment `dpl_6zCsSe15RwAy9AVFXZKszdJrTjBU` from `f33f250` |
 | Local validation | `pnpm check`, `pnpm test` — 7 files / 16 tests passed; `pnpm build:vercel` passed. |
-| Production validation | `pnpm test:production` passed with manifest, service worker, login, camps, family link, reminder readback, and reset checks. |
+| Production validation | `pnpm test:production` passed with manifest, service worker, login, camps, live-or-synthetic support locations, family link, reminder readback, and reset checks; current provider response was clearly labeled `synthetic`. |
