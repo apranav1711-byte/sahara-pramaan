@@ -151,6 +151,7 @@ const hindiDisplay: Record<string, string> = {
   "This result is synthetic. No real certificate, account, or notification has been created.": "यह परिणाम कृत्रिम है। कोई वास्तविक प्रमाणपत्र, खाता या सूचना नहीं बनाई गई है।",
   "Your prototype submission is complete.": "आपका प्रोटोटाइप जमा पूरा हो गया है।",
   "Your pension status for this demo is marked active. The next synthetic check is due 31 August 2026.": "इस डेमो के लिए आपकी पेंशन स्थिति सक्रिय चिह्नित है। अगली कृत्रिम जाँच 31 अगस्त 2026 को देय है।",
+  "Your pension status for this demo is marked active. The next synthetic check is due": "इस डेमो के लिए आपकी पेंशन स्थिति सक्रिय चिह्नित है। अगली कृत्रिम जाँच देय है",
   "SYNTHETIC PROTOTYPE — NOT A GOVERNMENT CERTIFICATE": "कृत्रिम प्रोटोटाइप — सरकारी प्रमाणपत्र नहीं",
   "Prototype reference": "प्रोटोटाइप संदर्भ",
   "Verification path": "सत्यापन मार्ग",
