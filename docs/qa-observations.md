@@ -104,6 +104,8 @@ The refreshed English landing and comfort menu were checked before the Hindi pas
 
 The Hindi pass was then checked in the same browser. The brand descriptor, read-aloud and disclosure links, comfort-menu labels, language label, large-text and contrast descriptions, reset action, prototype badge, hero copy, primary actions, alternative-path cards, certificate-preview labels, and footer disclosure all rendered in Hindi. The core navigation and landing guidance now have explicit browser-verified Hindi and English coverage.
 
+The synthetic login screen was also checked in Hindi. Its title, account labels, input labels, demo-type labels, instructions, navigation, and continue action rendered in Hindi. The only split acknowledgement fragment initially remaining in English was added explicitly to the dictionary and the code then passed TypeScript validation again.
+
 ## Build and Test Verification
 
 The production build completed successfully with Vite and the server bundle. TypeScript completed with zero errors, and the configured Vitest suite passed all five tests across authentication logout behavior, deterministic synthetic demo-state behavior, and the two-second family-status polling contract. The build emitted only a bundle-size optimization warning; it did not block the production build or the current prototype flows.

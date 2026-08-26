@@ -173,6 +173,7 @@ const hindiDisplay: Record<string, string> = {
   "Your certificate is due": "आपका प्रमाणपत्र देय है",
   "Complete this small step to keep your pension status active in this demo.": "इस डेमो में अपनी पेंशन स्थिति सक्रिय रखने के लिए यह छोटा चरण पूरा करें।",
   "No real messages are ever sent. By continuing, you acknowledge the independent-prototype disclosure.": "कोई वास्तविक संदेश कभी नहीं भेजा जाता। आगे बढ़कर आप स्वतंत्र प्रोटोटाइप सूचना स्वीकार करते हैं।",
+  "By continuing, you acknowledge the independent-prototype disclosure.": "आगे बढ़कर आप स्वतंत्र प्रोटोटाइप सूचना स्वीकार करते हैं।",
   "What this means:": "इसका अर्थ:",
   "This screen and image are synthetic proof-of-concept artifacts only. No official life certificate, payment status, SMS, bank record, or government update has been created.": "यह स्क्रीन और छवि केवल कृत्रिम अवधारणा-प्रमाण सामग्री हैं। कोई आधिकारिक जीवन प्रमाणपत्र, भुगतान स्थिति, SMS, बैंक रिकॉर्ड या सरकारी अपडेट नहीं बनाया गया है।",
 };
