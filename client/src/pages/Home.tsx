@@ -176,6 +176,28 @@ const hindiDisplay: Record<string, string> = {
   "By continuing, you acknowledge the independent-prototype disclosure.": "आगे बढ़कर आप स्वतंत्र प्रोटोटाइप सूचना स्वीकार करते हैं।",
   "What this means:": "इसका अर्थ:",
   "This screen and image are synthetic proof-of-concept artifacts only. No official life certificate, payment status, SMS, bank record, or government update has been created.": "यह स्क्रीन और छवि केवल कृत्रिम अवधारणा-प्रमाण सामग्री हैं। कोई आधिकारिक जीवन प्रमाणपत्र, भुगतान स्थिति, SMS, बैंक रिकॉर्ड या सरकारी अपडेट नहीं बनाया गया है।",
+  "In progress": "प्रगति में",
+  "OPENING YOUR SYNTHETIC STATUS": "आपकी कृत्रिम स्थिति खोली जा रही है",
+  "View prototype confirmation": "प्रोटोटाइप पुष्टि देखें",
+  "A family member, volunteer, or assisted device can use this mock locator. Locations and distances are synthetic and not live service information.": "परिवार का सदस्य, स्वयंसेवक या सहायक उपकरण इस मॉक लोकेटर का उपयोग कर सकता है। स्थान और दूरियाँ कृत्रिम हैं, लाइव सेवा जानकारी नहीं।",
+  "YOU": "आप",
+  "This decorative map is illustrative only. It does not use live geolocation or official venue records.": "यह सजावटी मानचित्र केवल उदाहरण के लिए है। इसमें लाइव भौगोलिक स्थान या आधिकारिक स्थल रिकॉर्ड का उपयोग नहीं होता।",
+  "Community centre": "सामुदायिक केंद्र",
+  "Bank support desk": "बैंक सहायता डेस्क",
+  "Post office": "डाकघर",
+  "Trust starts with explaining what a prototype can—and cannot—do.": "विश्वास की शुरुआत यह स्पष्ट करने से होती है कि प्रोटोटाइप क्या कर सकता है और क्या नहीं।",
+  "Sahara Pramaan is an independent hackathon prototype. It does not represent or connect to any government, UIDAI, bank, India Post, pension, or identity service.": "Sahara Pramaan एक स्वतंत्र हैकाथॉन प्रोटोटाइप है। यह किसी सरकार, UIDAI, बैंक, इंडिया पोस्ट, पेंशन या पहचान सेवा का प्रतिनिधित्व नहीं करता और न ही उनसे जुड़ता है।",
+  "All names, identifiers, OTPs, fingerprints, face/liveness results, family answers, camp locations, distances, confirmation references, reminders, and status changes are synthetic.": "सभी नाम, पहचानकर्ता, OTP, फिंगरप्रिंट, चेहरा/लाइवनेस परिणाम, पारिवारिक उत्तर, शिविर स्थान, दूरियाँ, पुष्टि संदर्भ, अनुस्मारक और स्थिति परिवर्तन कृत्रिम हैं।",
+  "The family-assist step is a low-friction demo interaction—not a secure identity-assurance mechanism. It must not be used to impersonate anyone or verify a real person.": "परिवार-सहायता चरण एक सहज डेमो इंटरैक्शन है—सुरक्षित पहचान-आश्वासन तंत्र नहीं। इसका उपयोग किसी का रूप धारण करने या किसी वास्तविक व्यक्ति का सत्यापन करने के लिए नहीं होना चाहिए।",
+  "A real version would need audited identity assurance, meaningful consent, fraud controls, privacy and accessibility review, regulated operations, live partner agreements, and an offline voice or USSD alternative.": "वास्तविक संस्करण के लिए ऑडिट किया गया पहचान-आश्वासन, सार्थक सहमति, धोखाधड़ी नियंत्रण, गोपनीयता और पहुँच समीक्षा, विनियमित संचालन, लाइव साझेदार समझौते तथा ऑफ़लाइन वॉइस या USSD विकल्प की आवश्यकता होगी।",
+  "See illustrative support locations sorted by a mock pincode.": "मॉक पिनकोड के अनुसार क्रमबद्ध उदाहरणात्मक सहायता स्थान देखें।",
+  "Camera access is unavailable or declined. You can still complete the clearly labeled simulated liveness path.": "कैमरा एक्सेस उपलब्ध नहीं है या अस्वीकार कर दिया गया है। आप फिर भी स्पष्ट रूप से लेबल किए गए सिमुलेटेड लाइवनेस मार्ग को पूरा कर सकते हैं।",
+  "Look forward": "सामने देखें",
+  "Blink": "पलक झपकाएँ",
+  "Done": "पूर्ण",
+  "Your pension status for this demo is marked active. The next synthetic check is due 31 August 2026.": "इस डेमो के लिए आपकी पेंशन स्थिति सक्रिय चिह्नित है। अगली कृत्रिम जाँच 31 August 2026 को देय है।",
+  "Prototype reference SP-2026-DEMO": "प्रोटोटाइप संदर्भ SP-2026-DEMO",
+  "liveness": "लाइवनेस",
 };
 
 function Button({ children, onClick, variant = "primary", icon: Icon, disabled = false, className = "" }: {
@@ -280,6 +302,10 @@ export default function Home() {
   const verifyFamilyMutation = trpc.prototype.verifyFamily.useMutation();
   const reminderMutation = trpc.prototype.reminder.useMutation();
   const resetMutation = trpc.prototype.reset.useMutation();
+  const profile = profileQuery.data?.profile;
+  const state = profileQuery.data?.state;
+  const isAssist = Boolean(assistToken);
+  const familyData = familyQuery.data;
 
   const setScreen = (next: Screen) => {
     setScreenState(next);
@@ -307,22 +333,22 @@ export default function Home() {
       const english = reverseDictionary[key] || key;
       return `${leading}${lang === "hi" ? hindiDisplay[english] || english : english}${trailing}`;
     };
-    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
-    const nodes: Text[] = [];
-    let node: Node | null;
-    while ((node = walker.nextNode())) nodes.push(node as Text);
-    nodes.forEach(textNode => { textNode.textContent = translate(textNode.textContent || ""); });
-    root.querySelectorAll<HTMLInputElement>("input[placeholder]").forEach(input => {
-      const placeholder = input.getAttribute("placeholder") || "";
-      const english = reverseDictionary[placeholder] || placeholder;
-      input.setAttribute("placeholder", lang === "hi" ? hindiDisplay[english] || english : english);
-    });
-  }, [lang, screen, pensionerId, assistToken]);
-
-  const profile = profileQuery.data?.profile;
-  const state = profileQuery.data?.state;
-  const isAssist = Boolean(assistToken);
-  const familyData = familyQuery.data;
+    const applyTranslations = () => {
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes: Text[] = [];
+      let node: Node | null;
+      while ((node = walker.nextNode())) nodes.push(node as Text);
+      nodes.forEach(textNode => { textNode.textContent = translate(textNode.textContent || ""); });
+      root.querySelectorAll<HTMLInputElement>("input[placeholder]").forEach(input => {
+        const placeholder = input.getAttribute("placeholder") || "";
+        const english = reverseDictionary[placeholder] || placeholder;
+        input.setAttribute("placeholder", lang === "hi" ? hindiDisplay[english] || english : english);
+      });
+    };
+    applyTranslations();
+    const translationTimer = window.setInterval(applyTranslations, 250);
+    return () => window.clearInterval(translationTimer);
+  }, [lang, screen, pensionerId, assistToken, cameraAllowed, profileQuery.dataUpdatedAt, familyQuery.dataUpdatedAt]);
 
   const resetDemo = () => resetMutation.mutate(undefined, { onSuccess: () => { setPensionerId(null); setAssistToken(null); setLinkCreated(null); setVerificationMethod(undefined); setScreenState("landing"); window.history.replaceState({}, "", window.location.pathname); toast.success("Synthetic demo reset. You are ready for a fresh recording take."); } });
 
