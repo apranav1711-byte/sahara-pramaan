@@ -15,10 +15,18 @@ This record describes the final production verification of Sahara Pramaan’s **
 | Two-page family assist | Two independent Chromium pages on the exact public deployment | The first pensioner page rendered submitted status 2 ms after the second page rendered completion, 2,842 ms after the completion action began. |
 | Reduced motion and focus | Chromium reduced-motion emulation and keyboard inspection | Motion media query matched; animation durations became `0.00001s`; keyboard focus had a 3px solid outline. |
 | Read aloud | Instrumented browser-native speech-synthesis invocation | The public control invoked speech synthesis once; physical audio remains outside sandbox scope. |
+| Current presenter/confirmation refinement | Public GitHub `main`, commit `35ebf7b`, and direct public-alias browser session | Credential-copy toast, printable-preview control, explicit non-official notice, and printable-preview download toast observed. |
+| Current synthetic API smoke test | `POST /api/trpc/prototype.login?batch=1` using only `DEMO-PASS` / mock OTP `123456` | HTTP 200 received. |
 
 ## Verified Production Behavior
 
 The public production page continues to present the independent-prototype and synthetic-data-only boundary before a user enters the test flow. The `DEMO-FAIL` and `DEMO-PASS` accounts with mock OTP `123456` remain synthetic recording aids; no real messaging is sent as part of the login path.
+
+## Current presenter and confirmation refinement verification
+
+The current public source revision is [`35ebf7b`](https://github.com/apranav1711-byte/sahara-pramaan/commit/35ebf7be95ceff2a485abe949160748e45a9a349). On the public alias, the presenter area displayed **Copy credentials** beside **Copy steps** and produced the synthetic-credentials success toast. The browser then completed the `DEMO-PASS` synthetic journey and opened the confirmation card, where **Save printable preview** and **Print confirmation** were present above the card. The confirmation retained **“SYNTHETIC PROTOTYPE — NOT A GOVERNMENT CERTIFICATE”** and the explanation that no official certificate, payment status, SMS, bank record, or government update had been created.
+
+Selecting **Save printable preview** on that public card produced a confirmation toast and a valid `1240 × 1754` portrait PNG in the browser download folder. A safe synthetic login procedure request using `DEMO-PASS` and mock OTP `123456` returned HTTP 200 from the public tRPC endpoint. The brief preparation overlay itself was captured in a separate managed-preview QA session because its intentional 520 ms duration is shorter than the public interactive screenshot cadence; that session confirmed its polite status announcement and motion gating.
 
 The final reminder preference release was validated through actual UI interactions, not by inspecting source alone. Hindi save feedback read **“मॉक पसंद सहेज ली गईं। कोई संदेश नहीं भेजा जाएगा।”** and English save feedback read **“Mock preferences saved. No message will be sent.”**. This supports the intended limitation that the feature records only mock preferences and does not initiate real communications.
 
