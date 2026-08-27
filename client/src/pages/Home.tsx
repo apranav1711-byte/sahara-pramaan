@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Accessibility, ArrowLeft, ArrowRight, Bell, Camera, Check, ChevronRight, CircleHelp,
   ClipboardCheck, Contrast, Copy, Ear, Fingerprint, HeartHandshake, Info, Landmark,
-  ImageDown, Languages, LocateFixed, MapPin, Menu, Mic, Phone, Printer, RefreshCw, Route, Send, ShieldCheck,
+  ImageDown, Languages, LocateFixed, MapPin, Menu, Mic, Moon, Phone, Printer, RefreshCw, Route, Send, ShieldCheck,
   Sparkles, TimerReset, UserRoundCheck, UsersRound, Volume2, X,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { trpc } from "@/lib/trpc";
 import { buildJpegPdf, formatConfirmationDate } from "@/lib/confirmationExport";
 import { FAMILY_STATUS_POLL_MS } from "../../../shared/prototypeConfig";
 import { formatPresenterCredentials, formatPresenterSteps, presenterCopySuccess, presenterCredentialsCopySuccess } from "@/lib/presenterFlow";
+import { useTheme } from "@/contexts/ThemeContext";
 
 type Screen = "landing" | "login" | "home" | "fingerprint" | "fallback" | "liveness" | "familyLink" | "confirmation" | "camps" | "reminders" | "how";
 type Lang = "en" | "hi";
@@ -62,6 +63,9 @@ const hindiDisplay: Record<string, string> = {
   "Increase type across the prototype": "पूरे प्रोटोटाइप में अक्षर बड़े करें",
   "High contrast": "उच्च कंट्रास्ट",
   "Increase color contrast": "रंगों का अंतर बढ़ाएँ",
+  "Dark mode": "डार्क मोड",
+  "Use a calmer low-light palette": "कम रोशनी के लिए शांत रंगों का उपयोग करें",
+  "Low-light palette is on": "कम रोशनी वाला रंग-पैलेट चालू है",
   "Language": "भाषा",
   "Uses your device’s built-in voice": "आपके उपकरण की अंतर्निहित आवाज़ का उपयोग करता है",
   "Reset synthetic session": "कृत्रिम सत्र रीसेट करें",
@@ -256,9 +260,9 @@ function Button({ children, onClick, variant = "primary", icon: Icon, disabled =
   </button>;
 }
 
-function Toggle({ checked, onChange, label, description }: { checked: boolean; onChange: (next: boolean) => void; label: string; description?: string }) {
+function Toggle({ checked, onChange, label, description, icon: Icon }: { checked: boolean; onChange: (next: boolean) => void; label: string; description?: string; icon?: React.ElementType }) {
   return <button onClick={() => onChange(!checked)} role="switch" aria-checked={checked} className="flex w-full items-center gap-4 rounded-2xl border border-sahara-ink/10 bg-white px-4 py-4 text-left transition hover:border-sahara-ink/25 active:scale-[.99]">
-    <span className={`relative h-7 w-12 shrink-0 rounded-full transition ${checked ? "bg-sahara-forest" : "bg-slate-200"}`}><span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition ${checked ? "left-6" : "left-1"}`} /></span>
+    <span className={`relative h-7 w-12 shrink-0 rounded-full transition ${checked ? "bg-sahara-forest" : "bg-slate-200"}`}><span className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow transition ${checked ? "left-6" : "left-1"}`} /></span>{Icon && <Icon className="h-5 w-5 shrink-0 text-sahara-forest" />}
     <span><span className="block font-bold text-sahara-ink">{label}</span>{description && <span className="mt-0.5 block text-sm text-slate-500">{description}</span>}</span>
   </button>;
 }
@@ -273,8 +277,8 @@ function StatusPill({ status }: { status: "due" | "in_progress" | "pending_famil
   return <span className={`inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-bold ${info[1]}`}><span className="h-1.5 w-1.5 rounded-full bg-current" />{info[0]}</span>;
 }
 
-function Shell({ children, screen, setScreen, lang, setLang, large, setLarge, contrast, setContrast, onReset }: {
-  children: React.ReactNode; screen: Screen; setScreen: (screen: Screen) => void; lang: Lang; setLang: (lang: Lang) => void; large: boolean; setLarge: (value: boolean) => void; contrast: boolean; setContrast: (value: boolean) => void; onReset: () => void;
+function Shell({ children, screen, setScreen, lang, setLang, large, setLarge, contrast, setContrast, dark, onDarkChange, onReset }: {
+  children: React.ReactNode; screen: Screen; setScreen: (screen: Screen) => void; lang: Lang; setLang: (lang: Lang) => void; large: boolean; setLarge: (value: boolean) => void; contrast: boolean; setContrast: (value: boolean) => void; dark: boolean; onDarkChange: () => void; onReset: () => void;
 }) {
   const copy = text[lang];
   const [menu, setMenu] = useState(false);
@@ -304,6 +308,7 @@ function Shell({ children, screen, setScreen, lang, setLang, large, setLarge, co
         <div className="space-y-2">
           <Toggle checked={large} onChange={setLarge} label="Larger text" description="Increase type across the prototype" />
           <Toggle checked={contrast} onChange={setContrast} label="High contrast" description="Increase color contrast" />
+          <Toggle checked={dark} onChange={onDarkChange} label="Dark mode" description={dark ? "Low-light palette is on" : "Use a calmer low-light palette"} icon={Moon} />
           <button onClick={() => setLang(lang === "en" ? "hi" : "en")} className="flex min-h-14 w-full items-center justify-between rounded-2xl border border-sahara-ink/10 px-4 text-left hover:border-sahara-ink/25"><span className="flex items-center gap-3"><Languages className="h-5 w-5 text-sahara-forest"/><span><span className="block font-bold">Language</span><span className="text-sm text-slate-500">{lang === "en" ? "English" : "हिन्दी"}</span></span></span><ChevronRight className="h-4 w-4" /></button>
           <button onClick={speak} className="flex min-h-14 w-full items-center gap-3 rounded-2xl border border-sahara-ink/10 px-4 text-left hover:border-sahara-ink/25"><Volume2 className="h-5 w-5 text-sahara-forest"/><span><span className="block font-bold">{copy.read}</span><span className="text-sm text-slate-500">Uses your device’s built-in voice</span></span></button>
         </div>
@@ -328,6 +333,7 @@ function PresenterFlowCard({ language, open, onToggle, onCopy, onCopyCredentials
 }
 
 export default function Home() {
+  const { theme, toggleTheme } = useTheme();
   const initialAssist = new URLSearchParams(window.location.search).get("assist");
   const [screen, setScreenState] = useState<Screen>(initialAssist ? "home" : "landing");
   const [lang, setLang] = useState<Lang>(() => localStorage.getItem("sahara-pramaan-language") === "hi" ? "hi" : "en");
@@ -633,7 +639,7 @@ export default function Home() {
     </div>
   </section>;
 
-  return <Shell screen={screen} setScreen={setScreen} lang={lang} setLang={setLang} large={large} setLarge={setLarge} contrast={contrast} setContrast={setContrast} onReset={resetDemo}>
+  return <Shell screen={screen} setScreen={setScreen} lang={lang} setLang={setLang} large={large} setLarge={setLarge} contrast={contrast} setContrast={setContrast} dark={theme === "dark"} onDarkChange={() => toggleTheme?.()} onReset={resetDemo}>
     {screen === "landing" && <PresenterFlowCard language={lang} open={recordingModeOpen} onToggle={() => setRecordingModeOpen(open => !open)} onCopy={copyPresenterSteps} onCopyCredentials={copyPresenterCredentials} />}
     {screen === "confirmation" && isPreparingConfirmation && <div className="print-hide fixed inset-0 z-50 grid place-items-center bg-sahara-cream/92 px-5 backdrop-blur-sm" role="status" aria-live="polite"><div className="w-full max-w-sm rounded-[30px] border border-sahara-forest/15 bg-white p-7 text-center shadow-lift"><span className="confirmation-prep-orbit mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-sahara-mint text-sahara-forest"><ClipboardCheck className="h-6 w-6"/></span><h2 className="font-display mt-5 text-3xl tracking-[-.04em]">{lang === "hi" ? "पुष्टि तैयार की जा रही है" : "Preparing your confirmation"}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{lang === "hi" ? "कृत्रिम प्रोटोटाइप स्थिति को स्पष्ट रूप से चिह्नित किया जा रहा है।" : "Clearly marking this synthetic prototype status."}</p></div></div>}
     {screen === "confirmation" && <div className="print-hide mx-auto flex w-full max-w-4xl flex-wrap justify-end gap-2 pt-2"><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={downloadPrintablePreview} icon={ImageDown}>{lang === "hi" ? "प्रिंट पूर्वावलोकन सहेजें" : "Save printable preview"}</Button><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={() => window.print()} icon={Printer}>{lang === "hi" ? "पुष्टि प्रिंट करें" : "Print confirmation"}</Button></div>}

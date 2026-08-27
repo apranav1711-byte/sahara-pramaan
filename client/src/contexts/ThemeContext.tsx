@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-
-type Theme = "light" | "dark";
+import { resolveTheme, toggleTheme as getToggledTheme, type Theme } from "@/lib/themePreference";
 
 interface ThemeContextType {
   theme: Theme;
@@ -23,8 +22,8 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     if (switchable) {
-      const stored = localStorage.getItem("sahara-pramaan-theme");
-      return stored === "dark" || stored === "light" ? stored : defaultTheme;
+      const stored = localStorage.getItem("theme");
+      return resolveTheme(stored, defaultTheme);
     }
     return defaultTheme;
   });
@@ -38,13 +37,13 @@ export function ThemeProvider({
     }
 
     if (switchable) {
-      localStorage.setItem("sahara-pramaan-theme", theme);
+      localStorage.setItem("theme", theme);
     }
   }, [theme, switchable]);
 
   const toggleTheme = switchable
-    ? () => {
-        setTheme(prev => (prev === "light" ? "dark" : "light"));
+      ? () => {
+        setTheme(getToggledTheme);
       }
     : undefined;
 

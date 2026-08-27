@@ -52,3 +52,5 @@
 - [x] Add a presenter-friendly one-tap action that copies all synthetic walkthrough credentials alongside Copy steps.
 - [x] Add a downloadable print-preview image option for the synthetic confirmation card.
 - [x] Add a subtle, accessible loading animation while the confirmation card is being generated.
+- [x] Reassign unintended legacy non-owner GitHub commit attribution on `main` while preserving the project source and history; retain the repository and allow GitHub’s separate contributor cache to refresh naturally.
+- [x] Add a persistent, bilingual, accessibility-friendly dark-mode toggle that maintains legibility and the independent synthetic-only disclosure treatment.

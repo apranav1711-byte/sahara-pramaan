@@ -34,6 +34,38 @@
   .pulse-soft { animation: pulse-soft 2.2s ease-in-out infinite; }
 }
 
+/* Dark mode keeps the warm, low-stress Sahara palette while raising contrast for low-light use. */
+html.dark body { background: #081819; color: #edf5f1; }
+html.dark .bg-sahara-cream { background-color: #0b1d1e !important; }
+html.dark .bg-white, html.dark .bg-white\/70, html.dark .bg-white\/85, html.dark .bg-white\/74 { background-color: #152b2b !important; }
+html.dark .bg-sahara-mist { background-color: #203938 !important; }
+html.dark .bg-sahara-mint { background-color: #254745 !important; }
+html.dark .bg-sahara-ink { background-color: #0c2d2d !important; }
+html.dark .bg-sahara-forest { background-color: #155956 !important; }
+html.dark .text-sahara-ink { color: #f3f0e8 !important; }
+html.dark .text-sahara-forest { color: #aee1d4 !important; }
+html.dark .text-slate-500 { color: #b3c3bd !important; }
+html.dark .text-slate-600 { color: #d0dbd6 !important; }
+html.dark .border-sahara-ink\/10, html.dark .border-sahara-ink\/15, html.dark .border-sahara-forest\/15 { border-color: #3d625e !important; }
+html.dark .paper-noise { background-image: radial-gradient(rgba(229, 243, 237, .05) .7px, transparent .7px); }
+html.dark .glass-panel { background: rgba(21, 43, 43, .82); }
+html.dark .shadow-lift { box-shadow: 0 22px 55px rgba(0, 0, 0, .30); }
+html.dark .bg-sahara-sun.text-sahara-ink { color: #152527 !important; }
+html.dark .bg-emerald-100 { background-color: #153e33 !important; }
+html.dark .text-emerald-700, html.dark .text-emerald-800 { color: #98ebc2 !important; }
+html.dark .bg-violet-100 { background-color: #312852 !important; }
+html.dark .text-violet-800 { color: #dac9ff !important; }
+html.dark .bg-sky-100 { background-color: #16394d !important; }
+html.dark .text-sky-800 { color: #a7ddff !important; }
+
+/* High contrast is an explicit accessibility preference and overrides either palette. */
+html.dark .high-contrast, .high-contrast { background: #fff !important; color: #000 !important; }
+html.dark .high-contrast .bg-sahara-cream, html.dark .high-contrast .bg-white, html.dark .high-contrast .bg-white\/70, html.dark .high-contrast .bg-white\/85, html.dark .high-contrast .bg-white\/74, html.dark .high-contrast .bg-sahara-mist, html.dark .high-contrast .bg-sahara-mint { background-color: #fff !important; }
+html.dark .high-contrast .bg-sahara-ink, html.dark .high-contrast .bg-sahara-forest { background-color: #000 !important; }
+html.dark .high-contrast .text-sahara-ink, html.dark .high-contrast .text-sahara-forest, html.dark .high-contrast .text-slate-500, html.dark .high-contrast .text-slate-600 { color: #000 !important; }
+html.dark .high-contrast .bg-sahara-ink, html.dark .high-contrast .bg-sahara-forest, html.dark .high-contrast .bg-sahara-ink .text-sahara-ink, html.dark .high-contrast .bg-sahara-forest .text-sahara-ink { color: #fff !important; }
+html.dark .high-contrast .paper-noise { background-image: none; }
+
 @keyframes page-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes float-gentle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 @keyframes pulse-soft { 0%,100% { box-shadow: 0 0 0 0 rgba(243,182,76,.28); } 60% { box-shadow: 0 0 0 12px rgba(243,182,76,0); } }
