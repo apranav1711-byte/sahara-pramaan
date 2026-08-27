@@ -11,9 +11,9 @@
 - [x] Build a synthetic confirmation artifact with a prominent non-official prototype watermark and download/share action.
 - [x] Build the public family-assist link/code flow with an explicit prototype-not-secure disclaimer.
 - [x] Implement reliable two-window family-assist status synchronization and retain direct production-browser evidence that the first window visibly updates within five seconds.
-- [x] Build the India-first support locator with validated PIN input, consented temporary coordinates, secure Google Maps geocoding/nearby lookup, live-or-synthetic labeling, and accessibility-friendly results.
+- [x] Build the illustrative mock camp locator with mock pincode sorting and accessibility-friendly results.
 - [x] Build mock reminder preferences while clearly confirming that no real messages or calls are sent.
-- [x] Implement explicit React locale rendering for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi across the primary user journeys.
+- [x] Implement Hindi and English translations across all core user journeys.
 - [x] Implement read-aloud controls, large-text mode, high-contrast mode, keyboard focus states, and reduced-motion support.
 - [x] Build the complete in-app “How this works” disclosure page with limitations and realistic scale-up requirements.
 - [x] Add deterministic demo-reset controls and document the recording-ready test flow.
@@ -27,7 +27,7 @@
 - [x] Document or test the client polling behavior that supports the automatic cross-window family status refresh.
 - [x] Re-run the live two-window QA with timestamped evidence of the first visible submitted-state change occurring within five seconds.
 - [x] Run a browser-based second-window family-assist submission and retain timestamped evidence from both browser windows before final checkpointing.
-- [x] Implement and browser-check critical-path copy for the ten supported Indian locales, including Kannada and Bengali.
+- [x] Implement explicit Hindi and English copy coverage for every core screen and verify both languages in the browser.
 - [x] Implement and verify keyboard-visible focus styles and prefers-reduced-motion behavior across interactive controls.
 - [x] Capture and review the landing experience at a 360px viewport and address any responsive or touch-target regressions.
 - [x] Record explicit 360px findings for overflow, primary touch targets, navigation controls, and content-card readability.
@@ -36,13 +36,15 @@
 - [x] Defer final video generation until the user supplies the screen-recording walkthrough.
 - [x] Add an in-app recording-mode panel with the three synthetic demo accounts and a reset shortcut.
 - [x] Format the confirmation-card date in Hindi when the Hindi flow is active.
-- [x] Retain synthetic confirmation PDF and share actions; intentionally remove image export to keep the confirmation surface focused.
-- [x] Verify and document the active synthetic Supabase connection, secure Maps adapter, live-or-synthetic fallback behavior, and final production integration status.
-
-## Deliberate next-stage work
-
-- [ ] Conduct native-speaker review and terminology QA for all ten supported locales.
-- [ ] Add a verified, timestamped India service directory for CSCs, post offices, bank correspondents, and assisted-service centers.
-- [ ] Add consented assisted-operator mode, human escalation, and a safe-handoff receipt.
-- [ ] Configure and compliance-review real Google OAuth or WhatsApp OTP before enabling either provider.
-- [ ] Record the final two-minute demo video after the owner supplies the walkthrough and recording direction.
+- [x] Add synthetic confirmation-card export options for image and PDF download.
+- [x] Verify and document the active synthetic Supabase connection, fallback behavior, and production integration status after the enhancement release.
+- [x] Audit the restored release end to end after the latest project changes, including source, tests, documentation, integrations, and deployment claims.
+- [x] Add a one-tap presenter flow card that copies the synthetic walkthrough steps.
+- [x] Add a control to collapse or hide the recording panel during a live presentation.
+- [x] Add print-layout CSS for a paper-friendly synthetic confirmation card with retained non-official disclosure.
+- [x] Remove hackathon and internal demo phrasing from presenter-facing copy while preserving mandatory independent synthetic-only and non-official boundaries.
+- [x] Re-run the integrated TypeScript, unit-test, build, and browser validation suite after the audit changes.
+- [ ] Synchronize the audited release documentation and save a new managed-project checkpoint.
+- [x] Browser-verify the confirmation print flow and confirm the non-official synthetic disclosure remains visible in the print layout.
+- [x] Remove remaining presenter-facing internal wording such as “Recording-ready code” and rescan the localized strings for leftover demo-style cues.
+- [x] Browser-test the new Copy steps action and the print action, then document those results alongside the passing check/test/build evidence. Copy steps was browser-verified; print was verified through clean headless print emulation and PDF inspection.
