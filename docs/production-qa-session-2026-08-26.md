@@ -28,6 +28,10 @@ The current public source revision is [`35ebf7b`](https://github.com/apranav1711
 
 Selecting **Save printable preview** on that public card produced a confirmation toast and a valid `1240 × 1754` portrait PNG in the browser download folder. A safe synthetic login procedure request using `DEMO-PASS` and mock OTP `123456` returned HTTP 200 from the public tRPC endpoint. The brief preparation overlay itself was captured in a separate managed-preview QA session because its intentional 520 ms duration is shorter than the public interactive screenshot cadence; that session confirmed its polite status announcement and motion gating.
 
+## Production theme refinement verification
+
+The Vercel dashboard reported the Git-linked `main` commit [`ff9790c`](https://github.com/apranav1711-byte/sahara-pramaan/commit/ff9790c06a5dc1bfefd24f33e3f5cdd2d66e03a5) as **Ready**. A direct public-alias browser session opened **Comfort controls**, located the **Dark mode** switch with its accessible switch semantics, and activated the low-light palette. The control updated its active description to **“Low-light palette is on”** and the public independent/synthetic-only disclosure remained visible and readable.
+
 The final reminder preference release was validated through actual UI interactions, not by inspecting source alone. Hindi save feedback read **“मॉक पसंद सहेज ली गईं। कोई संदेश नहीं भेजा जाएगा।”** and English save feedback read **“Mock preferences saved. No message will be sent.”**. This supports the intended limitation that the feature records only mock preferences and does not initiate real communications.
 
 The confirmation page was also inspected in both languages on the same release. It explicitly distinguishes itself from a government certificate and says no official life certificate, payment status, SMS, bank record, or government update was created. The static date string in Hindi is not localized to Hindi month formatting, so full locale-specific date formatting remains outside the verified scope.

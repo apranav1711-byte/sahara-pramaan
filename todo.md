@@ -55,4 +55,5 @@
 - [x] Reassign unintended legacy non-owner GitHub commit attribution on `main` while preserving the project source and history; retain the repository and allow GitHub’s separate contributor cache to refresh naturally.
 - [x] Add a persistent, bilingual, accessibility-friendly dark-mode toggle that maintains legibility and the independent synthetic-only disclosure treatment.
 - [x] Add reduced-motion-safe light/dark color transitions and use the operating system preference only when no explicit theme choice has been saved.
-- [ ] Prepare the verified theme refinement release for user-initiated publication through the project management interface.
+- [x] Synchronize the verified theme refinement source and create a managed-project checkpoint for user-initiated publication.
+- [x] Publish the checkpointed theme refinement through the project management interface and verify the public Vercel alias serves it.
