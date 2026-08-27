@@ -25,3 +25,47 @@ export function formatPresenterSteps(language: PresenterLanguage): string {
 export function presenterCopySuccess(language: PresenterLanguage): string {
   return language === "hi" ? "प्रस्तुति चरण कॉपी हो गए।" : "Presentation steps copied.";
 }
+
+export function formatPresenterCredentials(language: PresenterLanguage): string {
+  if (language === "hi") {
+    return [
+      "सहारा प्रमाण — कृत्रिम वॉकथ्रू विवरण",
+      "",
+      "वैकल्पिक सत्यापन मार्ग",
+      "आईडी: DEMO-FAIL",
+      "मॉक OTP: 123456",
+      "",
+      "फिंगरप्रिंट सफलता मार्ग",
+      "आईडी: DEMO-PASS",
+      "मॉक OTP: 123456",
+      "",
+      "वैकल्पिक मार्गों के लिए",
+      "आईडी: DEMO-MIXED",
+      "मॉक OTP: 123456",
+      "",
+      "केवल कृत्रिम प्रोटोटाइप। कोई वास्तविक पहचान, पेंशन या संदेश सेवा जुड़ी नहीं है।",
+    ].join("\n");
+  }
+
+  return [
+    "Sahara Pramaan — synthetic walkthrough credentials",
+    "",
+    "Alternate verification route",
+    "ID: DEMO-FAIL",
+    "Mock OTP: 123456",
+    "",
+    "Fingerprint success route",
+    "ID: DEMO-PASS",
+    "Mock OTP: 123456",
+    "",
+    "Explore alternate routes",
+    "ID: DEMO-MIXED",
+    "Mock OTP: 123456",
+    "",
+    "Synthetic prototype only. No real identity, pension, or messaging service is connected.",
+  ].join("\n");
+}
+
+export function presenterCredentialsCopySuccess(language: PresenterLanguage): string {
+  return language === "hi" ? "कृत्रिम वॉकथ्रू विवरण कॉपी हो गए।" : "Synthetic walkthrough credentials copied.";
+}

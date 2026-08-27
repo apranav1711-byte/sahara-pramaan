@@ -44,7 +44,11 @@
 - [x] Add print-layout CSS for a paper-friendly synthetic confirmation card with retained non-official disclosure.
 - [x] Remove hackathon and internal demo phrasing from presenter-facing copy while preserving mandatory independent synthetic-only and non-official boundaries.
 - [x] Re-run the integrated TypeScript, unit-test, build, and browser validation suite after the audit changes.
-- [ ] Synchronize the audited release documentation and save a new managed-project checkpoint.
+- [x] Synchronize the audited release documentation and save a new managed-project checkpoint.
 - [x] Browser-verify the confirmation print flow and confirm the non-official synthetic disclosure remains visible in the print layout.
 - [x] Remove remaining presenter-facing internal wording such as “Recording-ready code” and rescan the localized strings for leftover demo-style cues.
 - [x] Browser-test the new Copy steps action and the print action, then document those results alongside the passing check/test/build evidence. Copy steps was browser-verified; print was verified through clean headless print emulation and PDF inspection.
+- [x] Audit the complete current project and reconcile all recent user changes before the next enhancement release.
+- [x] Add a presenter-friendly one-tap action that copies all synthetic walkthrough credentials alongside Copy steps.
+- [x] Add a downloadable print-preview image option for the synthetic confirmation card.
+- [x] Add a subtle, accessible loading animation while the confirmation card is being generated.

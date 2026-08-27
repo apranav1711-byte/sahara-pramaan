@@ -6,7 +6,7 @@
 
 ## What works today
 
-The application is a responsive, mobile-first prototype with a public landing page, synthetic login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness simulation. It also includes a synthetic confirmation image and PDF export, print-friendly confirmation styling, a one-tap presenter walkthrough card, a hideable quick-start panel, an illustrative camp locator, synthetic reminder preferences, a comprehensive disclosure screen, high-contrast and large-type comfort controls, Hindi/English switching, and browser-native read-aloud controls.
+The application is a responsive, mobile-first prototype with a public landing page, synthetic login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness simulation. It also includes synthetic confirmation PNG/PDF export, a paper-ready confirmation preview image, print-friendly confirmation styling, brief accessible confirmation-preparation feedback, one-tap synthetic presenter credential and walkthrough copy actions, a hideable quick-start panel, an illustrative camp locator, synthetic reminder preferences, a comprehensive disclosure screen, high-contrast and large-type comfort controls, Hindi/English switching, and browser-native read-aloud controls.
 
 | Journey | Demonstration behavior |
 | --- | --- |

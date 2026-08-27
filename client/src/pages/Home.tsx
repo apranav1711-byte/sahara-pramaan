@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import {
   Accessibility, ArrowLeft, ArrowRight, Bell, Camera, Check, ChevronRight, CircleHelp,
   ClipboardCheck, Contrast, Copy, Ear, Fingerprint, HeartHandshake, Info, Landmark,
-  Languages, LocateFixed, MapPin, Menu, Mic, Phone, Printer, RefreshCw, Route, Send, ShieldCheck,
+  ImageDown, Languages, LocateFixed, MapPin, Menu, Mic, Phone, Printer, RefreshCw, Route, Send, ShieldCheck,
   Sparkles, TimerReset, UserRoundCheck, UsersRound, Volume2, X,
 } from "lucide-react";
 import { toast } from "sonner";
 import { trpc } from "@/lib/trpc";
 import { buildJpegPdf, formatConfirmationDate } from "@/lib/confirmationExport";
 import { FAMILY_STATUS_POLL_MS } from "../../../shared/prototypeConfig";
-import { formatPresenterSteps, presenterCopySuccess } from "@/lib/presenterFlow";
+import { formatPresenterCredentials, formatPresenterSteps, presenterCopySuccess, presenterCredentialsCopySuccess } from "@/lib/presenterFlow";
 
 type Screen = "landing" | "login" | "home" | "fingerprint" | "fallback" | "liveness" | "familyLink" | "confirmation" | "camps" | "reminders" | "how";
 type Lang = "en" | "hi";
@@ -223,6 +223,8 @@ const hindiDisplay: Record<string, string> = {
   "Prototype reference SP-2026-DEMO": "प्रोटोटाइप संदर्भ SP-2026-DEMO",
   "liveness": "लाइवनेस",
   "Quick-start · synthetic only": "त्वरित-आरंभ · केवल कृत्रिम",
+  "Copy credentials": "विवरण कॉपी करें",
+  "Synthetic walkthrough credentials copied.": "कृत्रिम वॉकथ्रू विवरण कॉपी हो गए।",
   "Choose a route to continue.": "आगे बढ़ने के लिए मार्ग चुनें।",
   "Fallback": "वैकल्पिक मार्ग",
   "Success": "सफलता",
@@ -234,6 +236,10 @@ const hindiDisplay: Record<string, string> = {
   "Close recording mode": "रिकॉर्डिंग मोड बंद करें",
   "Synthetic confirmation image download started.": "कृत्रिम पुष्टि-छवि डाउनलोड शुरू हो गया।",
   "Synthetic confirmation PDF download started.": "कृत्रिम पुष्टि PDF डाउनलोड शुरू हो गया।",
+  "Save printable preview": "प्रिंट पूर्वावलोकन सहेजें",
+  "Printable preview image download started.": "प्रिंट पूर्वावलोकन छवि डाउनलोड शुरू हो गया।",
+  "Preparing your confirmation": "आपकी पुष्टि तैयार की जा रही है",
+  "Clearly marking this synthetic prototype status.": "इस कृत्रिम प्रोटोटाइप स्थिति को स्पष्ट रूप से चिह्नित किया जा रहा है।",
 };
 
 function Button({ children, onClick, variant = "primary", icon: Icon, disabled = false, className = "" }: {
@@ -311,12 +317,12 @@ function Shell({ children, screen, setScreen, lang, setLang, large, setLarge, co
 
 function AppMark({ className = "" }: { className?: string }) { return <span className={`grid place-items-center rounded-2xl bg-sahara-mint text-sahara-forest ${className}`}><Landmark className="h-5 w-5" /></span>; }
 
-function PresenterFlowCard({ language, open, onToggle, onCopy }: { language: Lang; open: boolean; onToggle: () => void; onCopy: () => void }) {
+function PresenterFlowCard({ language, open, onToggle, onCopy, onCopyCredentials }: { language: Lang; open: boolean; onToggle: () => void; onCopy: () => void; onCopyCredentials: () => void }) {
   const hindi = language === "hi";
   return <aside className="print-hide mx-auto w-full max-w-6xl pt-2 sm:pt-4" aria-label={hindi ? "प्रस्तुतकर्ता सहायता" : "Presenter support"}>
     <div className="flex flex-col gap-3 rounded-[24px] border border-sahara-forest/15 bg-white/85 p-4 shadow-sm backdrop-blur sm:flex-row sm:items-center sm:justify-between sm:px-5">
       <div><p className="text-xs font-bold uppercase tracking-[.12em] text-sahara-forest">{hindi ? "प्रस्तुतकर्ता सहायता" : "Presenter support"}</p><p className="mt-1 text-sm text-slate-600">{hindi ? "चार चरणों का प्रवाह एक बार में कॉपी करें।" : "Copy the four-step flow in one action."}</p></div>
-      <div className="flex flex-col gap-2 sm:flex-row"><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={onCopy} icon={Copy}>{hindi ? "चरण कॉपी करें" : "Copy steps"}</Button><Button variant="ghost" className="min-h-10 rounded-xl px-4 text-sm" onClick={onToggle}>{open ? (hindi ? "त्वरित-आरंभ पैनल छिपाएँ" : "Hide quick-start panel") : (hindi ? "त्वरित-आरंभ पैनल दिखाएँ" : "Show quick-start panel")}</Button></div>
+      <div className="flex flex-col gap-2 sm:flex-row"><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={onCopy} icon={Copy}>{hindi ? "चरण कॉपी करें" : "Copy steps"}</Button><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={onCopyCredentials} icon={ClipboardCheck}>{hindi ? "विवरण कॉपी करें" : "Copy credentials"}</Button><Button variant="ghost" className="min-h-10 rounded-xl px-4 text-sm" onClick={onToggle}>{open ? (hindi ? "त्वरित-आरंभ पैनल छिपाएँ" : "Hide quick-start panel") : (hindi ? "त्वरित-आरंभ पैनल दिखाएँ" : "Show quick-start panel")}</Button></div>
     </div>
   </aside>;
 }
@@ -337,6 +343,7 @@ export default function Home() {
   const [familyAnswer, setFamilyAnswer] = useState("");
   const [linkCreated, setLinkCreated] = useState<{ token: string; code: string } | null>(null);
   const [recordingModeOpen, setRecordingModeOpen] = useState(false);
+  const [isPreparingConfirmation, setIsPreparingConfirmation] = useState(false);
 
   const copy = text[lang];
   const profileQuery = trpc.prototype.pensioner.useQuery({ pensionerId: pensionerId || "pensioner-demo-fail" }, { enabled: Boolean(pensionerId), refetchInterval: screen === "home" && pensionerId ? FAMILY_STATUS_POLL_MS : false });
@@ -367,6 +374,14 @@ export default function Home() {
   useEffect(() => {
     document.body.classList.toggle("printing-confirmation", screen === "confirmation");
     return () => document.body.classList.remove("printing-confirmation");
+  }, [screen]);
+
+  useEffect(() => {
+    if (screen !== "confirmation") { setIsPreparingConfirmation(false); return; }
+    setIsPreparingConfirmation(true);
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = window.setTimeout(() => setIsPreparingConfirmation(false), prefersReducedMotion ? 0 : 520);
+    return () => window.clearTimeout(timer);
   }, [screen]);
 
   useEffect(() => {
@@ -407,6 +422,11 @@ export default function Home() {
 
   const copyPresenterSteps = async () => {
     try { await navigator.clipboard.writeText(formatPresenterSteps(lang)); toast.success(presenterCopySuccess(lang)); }
+    catch { toast.message(lang === "hi" ? "क्लिपबोर्ड उपलब्ध नहीं है।" : "Clipboard access is unavailable."); }
+  };
+
+  const copyPresenterCredentials = async () => {
+    try { await navigator.clipboard.writeText(formatPresenterCredentials(lang)); toast.success(presenterCredentialsCopySuccess(lang)); }
     catch { toast.message(lang === "hi" ? "क्लिपबोर्ड उपलब्ध नहीं है।" : "Clipboard access is unavailable."); }
   };
 
@@ -511,6 +531,61 @@ export default function Home() {
     toast.success("Synthetic confirmation image download started.");
   };
 
+  const printablePreviewCanvas = () => {
+    const source = confirmationCanvas();
+    if (!source || !profile || !state?.confirmationRef) return;
+    const canvas = document.createElement("canvas");
+    canvas.width = 1240;
+    canvas.height = 1754;
+    const context = canvas.getContext("2d");
+    if (!context) return;
+    const hindi = lang === "hi";
+    const canvasFont = hindi ? "Noto Sans Devanagari, Arial, sans-serif" : "DM Sans, Arial, sans-serif";
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
+    context.fillStyle = "#145755";
+    context.fillRect(0, 0, canvas.width, 148);
+    context.fillStyle = "#ffffff";
+    context.font = `700 28px ${canvasFont}`;
+    context.fillText(hindi ? "प्रिंट पूर्वावलोकन • कृत्रिम प्रोटोटाइप" : "PRINT PREVIEW • SYNTHETIC PROTOTYPE", 62, 66);
+    context.font = `500 19px ${canvasFont}`;
+    context.fillText(hindi ? "आधिकारिक प्रमाणपत्र नहीं" : "NOT AN OFFICIAL CERTIFICATE", 62, 106);
+    context.drawImage(source, 60, 218, 1120, 700);
+    context.fillStyle = "#f2ede4";
+    context.fillRect(60, 990, 1120, 270);
+    context.fillStyle = "#145755";
+    context.font = `700 25px ${canvasFont}`;
+    context.fillText(hindi ? "महत्वपूर्ण सूचना" : "IMPORTANT NOTICE", 104, 1056);
+    context.font = `400 24px ${canvasFont}`;
+    const notice = hindi
+      ? "यह प्रिंट पूर्वावलोकन केवल कृत्रिम प्रोटोटाइप जानकारी है। कोई आधिकारिक जीवन प्रमाणपत्र, भुगतान स्थिति, बैंक रिकॉर्ड या सरकारी अपडेट नहीं बनाया गया है।"
+      : "This printable preview contains synthetic prototype information only. No official life certificate, payment status, bank record, or government update has been created.";
+    const words = notice.split(" ");
+    let line = "";
+    let y = 1105;
+    for (const word of words) {
+      const candidate = line ? `${line} ${word}` : word;
+      if (context.measureText(candidate).width > 972 && line) { context.fillText(line, 104, y); line = word; y += 40; }
+      else line = candidate;
+    }
+    if (line) context.fillText(line, 104, y);
+    context.fillStyle = "#64748b";
+    context.font = `500 18px ${canvasFont}`;
+    context.fillText(`${hindi ? "प्रोटोटाइप संदर्भ" : "Prototype reference"}: ${state.confirmationRef}`, 62, 1668);
+    return canvas;
+  };
+
+  const downloadPrintablePreview = () => {
+    if (!state?.confirmationRef) return;
+    const canvas = printablePreviewCanvas();
+    if (!canvas) return;
+    const link = document.createElement("a");
+    link.href = canvas.toDataURL("image/png");
+    link.download = `sahara-pramaan-print-preview-${state.confirmationRef}.png`;
+    link.click();
+    toast.success(lang === "hi" ? "प्रिंट पूर्वावलोकन डाउनलोड शुरू हो गया।" : "Printable preview image download started.");
+  };
+
   const downloadConfirmationPdf = () => {
     if (!profile || !state?.confirmationRef) return;
     const canvas = confirmationCanvas();
@@ -559,8 +634,9 @@ export default function Home() {
   </section>;
 
   return <Shell screen={screen} setScreen={setScreen} lang={lang} setLang={setLang} large={large} setLarge={setLarge} contrast={contrast} setContrast={setContrast} onReset={resetDemo}>
-    {screen === "landing" && <PresenterFlowCard language={lang} open={recordingModeOpen} onToggle={() => setRecordingModeOpen(open => !open)} onCopy={copyPresenterSteps} />}
-    {screen === "confirmation" && <div className="print-hide mx-auto w-full max-w-4xl pt-2 text-right"><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={() => window.print()} icon={Printer}>{lang === "hi" ? "पुष्टि प्रिंट करें" : "Print confirmation"}</Button></div>}
+    {screen === "landing" && <PresenterFlowCard language={lang} open={recordingModeOpen} onToggle={() => setRecordingModeOpen(open => !open)} onCopy={copyPresenterSteps} onCopyCredentials={copyPresenterCredentials} />}
+    {screen === "confirmation" && isPreparingConfirmation && <div className="print-hide fixed inset-0 z-50 grid place-items-center bg-sahara-cream/92 px-5 backdrop-blur-sm" role="status" aria-live="polite"><div className="w-full max-w-sm rounded-[30px] border border-sahara-forest/15 bg-white p-7 text-center shadow-lift"><span className="confirmation-prep-orbit mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-sahara-mint text-sahara-forest"><ClipboardCheck className="h-6 w-6"/></span><h2 className="font-display mt-5 text-3xl tracking-[-.04em]">{lang === "hi" ? "पुष्टि तैयार की जा रही है" : "Preparing your confirmation"}</h2><p className="mt-2 text-sm leading-6 text-slate-600">{lang === "hi" ? "कृत्रिम प्रोटोटाइप स्थिति को स्पष्ट रूप से चिह्नित किया जा रहा है।" : "Clearly marking this synthetic prototype status."}</p></div></div>}
+    {screen === "confirmation" && <div className="print-hide mx-auto flex w-full max-w-4xl flex-wrap justify-end gap-2 pt-2"><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={downloadPrintablePreview} icon={ImageDown}>{lang === "hi" ? "प्रिंट पूर्वावलोकन सहेजें" : "Save printable preview"}</Button><Button variant="light" className="min-h-10 rounded-xl px-4 text-sm" onClick={() => window.print()} icon={Printer}>{lang === "hi" ? "पुष्टि प्रिंट करें" : "Print confirmation"}</Button></div>}
     {screen === "home" && !profile && !isAssist && <section className="mx-auto flex w-full max-w-6xl flex-1 items-center py-5 sm:py-10"><div className="grid w-full gap-5 lg:grid-cols-[1.3fr_.7fr]"><div className="min-h-[360px] rounded-[32px] bg-sahara-ink p-7 shadow-lift sm:p-9"><span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-xs font-bold text-white"><RefreshCw className="h-3.5 w-3.5 animate-spin text-sahara-sun"/>OPENING YOUR SYNTHETIC STATUS</span><div className="mt-16 max-w-xl animate-pulse"><div className="h-4 w-36 rounded-full bg-white/15"/><div className="mt-5 h-12 w-full max-w-md rounded-2xl bg-white/10"/><div className="mt-3 h-12 w-4/5 rounded-2xl bg-white/10"/><div className="mt-9 h-12 w-44 rounded-2xl bg-sahara-sun/40"/></div></div><div className="min-h-[220px] rounded-[30px] bg-white p-6 shadow-sm"><div className="h-10 w-10 animate-pulse rounded-2xl bg-sahara-mist"/><div className="mt-6 h-5 w-40 animate-pulse rounded-full bg-sahara-mist"/><div className="mt-3 h-16 w-full animate-pulse rounded-2xl bg-sahara-mist"/></div></div></section>}
     {activeScreen === "family" ? familyScreen : <>
       {screen === "landing" && <section className="relative flex flex-1 items-center py-6 sm:py-10"><div className="grid w-full items-center gap-10 lg:grid-cols-[1.08fr_.92fr] lg:gap-16"><div className="page-enter max-w-2xl"><div className="inline-flex items-center gap-2 rounded-full border border-sahara-forest/15 bg-white/70 px-3 py-2 text-[11px] font-bold uppercase tracking-[.11em] text-sahara-forest"><span className="h-2 w-2 rounded-full bg-sahara-sun pulse-soft"/>{copy.prototype}</div><h1 className="font-display mt-7 text-5xl leading-[.96] tracking-[-.065em] text-sahara-ink sm:text-6xl lg:text-7xl">A more <em className="font-display text-sahara-forest">human</em> way to stay on track.</h1><p className="mt-7 max-w-xl text-[18px] leading-8 text-slate-600 sm:text-xl">{copy.welcome} Built with large, calm steps for pensioners—and a simple family-assist route when an extra hand is needed.</p><div className="mt-9 flex flex-col gap-3 sm:flex-row"><Button variant="sun" onClick={() => setScreen("login")} icon={ArrowRight}>{copy.begin}</Button><Button variant="light" onClick={() => setRecordingModeOpen(open => !open)}>{copy.demo}</Button></div>{recordingModeOpen && <div className="mt-5 max-w-xl rounded-[26px] border border-sahara-forest/15 bg-white p-4 shadow-lift page-enter" aria-label={lang === "hi" ? "कृत्रिम त्वरित-आरंभ विकल्प" : "Synthetic quick-start options"}><div className="flex items-start justify-between gap-4"><div><p className="text-xs font-bold uppercase tracking-[.12em] text-sahara-forest">Quick-start · synthetic only</p><h2 className="font-display mt-1 text-2xl tracking-[-.035em]">Choose a route to continue.</h2></div><button onClick={() => setRecordingModeOpen(false)} className="rounded-xl p-2 text-slate-500 hover:bg-sahara-mist" aria-label="Close recording mode"><X className="h-4 w-4"/></button></div><div className="mt-4 grid gap-3 sm:grid-cols-3">{[{ id: "DEMO-FAIL", label: "Fallback", detail: "Fingerprint fails" }, { id: "DEMO-PASS", label: "Success", detail: "Fingerprint passes" }, { id: "DEMO-MIXED", label: "Mixed", detail: "Explore routes" }].map(account => <button key={account.id} onClick={() => { setIdentifier(account.id); setOtp("123456"); setRecordingModeOpen(false); setScreen("login"); }} className="rounded-2xl border border-sahara-ink/10 bg-sahara-cream p-3 text-left transition hover:border-sahara-forest hover:bg-sahara-mint"><span className="block text-[10px] font-bold tracking-[.12em] text-sahara-forest">{account.label === "Fallback" ? "Fallback route" : account.label === "Success" ? "Fingerprint success" : "Explore routes"}</span><span className="mt-1 block font-mono text-sm font-bold text-sahara-ink">{account.id}</span><span className="mt-1 block text-xs text-slate-500">OTP 123456 · {account.detail}</span></button>)}</div><div className="mt-4 flex flex-col gap-3 border-t border-sahara-ink/10 pt-4 sm:flex-row sm:items-center sm:justify-between"><p className="text-xs leading-5 text-slate-500">Reset clears only synthetic session state and returns to this start.</p><Button variant="ghost" className="justify-start px-2 text-sahara-coral" onClick={() => { setRecordingModeOpen(false); resetDemo(); }} icon={TimerReset}>Reset synthetic session</Button></div></div>}<div className="mt-9 grid max-w-xl grid-cols-3 gap-3"><div className="rounded-2xl bg-white/70 p-3 inset-glow"><Fingerprint className="h-5 w-5 text-sahara-coral"/><p className="mt-3 text-sm font-bold">Alternative paths</p></div><div className="rounded-2xl bg-white/70 p-3 inset-glow"><UsersRound className="h-5 w-5 text-sahara-forest"/><p className="mt-3 text-sm font-bold">Family assistance</p></div><div className="rounded-2xl bg-white/70 p-3 inset-glow"><Accessibility className="h-5 w-5 text-sahara-coral"/><p className="mt-3 text-sm font-bold">Comfort controls</p></div></div></div><div className="relative mx-auto w-full max-w-lg float-gentle"><div className="absolute -left-5 top-14 hidden rounded-2xl bg-white p-3 shadow-lift sm:block"><span className="flex items-center gap-2 text-xs font-bold text-sahara-forest"><Check className="h-4 w-4 rounded-full bg-emerald-100 p-0.5"/>Plain-language status</span></div><div className="relative overflow-hidden rounded-[34px] bg-sahara-ink p-4 shadow-2xl shadow-sahara-ink/25"><div className="rounded-[25px] bg-sahara-cream p-5 sm:p-7"><div className="flex items-center justify-between"><AppMark className="h-10 w-10"/><span className="rounded-full bg-sahara-sun/20 px-3 py-1.5 text-[10px] font-bold tracking-[.09em] text-sahara-ink">DUE THIS MONTH</span></div><p className="mt-8 text-sm font-bold text-slate-500">GOOD MORNING, KAMALA JI</p><h2 className="font-display mt-2 text-4xl leading-tight tracking-[-.045em]">Your yearly step is ready when you are.</h2><div className="mt-8 rounded-[22px] bg-white p-4 shadow-sm"><div className="flex items-center gap-3"><span className="grid h-11 w-11 place-items-center rounded-2xl bg-sahara-mint text-sahara-forest"><ClipboardCheck className="h-5 w-5"/></span><span><span className="block text-xs font-bold text-slate-500">NEXT STEP</span><span className="block font-bold">Verify your life certificate</span></span></div><div className="mt-4 h-2 rounded-full bg-sahara-mist"><div className="h-2 w-1/3 rounded-full bg-sahara-forest"/></div></div><Button variant="primary" className="mt-5 w-full">Continue gently <ArrowRight className="h-[18px] w-[18px]"/></Button></div></div><div className="absolute -bottom-5 -right-4 rounded-2xl bg-sahara-sun p-4 text-sahara-ink shadow-lift"><span className="block text-[10px] font-bold uppercase tracking-[.12em]">Built for</span><span className="font-display block text-xl font-semibold">everyday ease</span></div></div></div></section>}
