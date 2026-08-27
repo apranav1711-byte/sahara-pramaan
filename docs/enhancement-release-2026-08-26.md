@@ -1,6 +1,4 @@
-# Enhancement Release QA — 26 August 2026 (Historical Checkpoint)
-
-> **Historical note:** This document records an earlier build. For the current scope, use [`judge-submission.md`](./judge-submission.md), [`productization-handoff.md`](./productization-handoff.md), and [`integration-status.md`](./integration-status.md). The current release retains PDF/share confirmation actions, uses explicit ten-language locale rendering, and includes a live-or-synthetic Google Maps locator.
+# Enhancement Release QA — 26 August 2026
 
 ## Scope
 
@@ -8,19 +6,23 @@ This release adds only **synthetic prototype** convenience features. It does not
 
 | Enhancement | Production verification | Result |
 | --- | --- | --- |
-| Recording mode | Public landing page exposed `DEMO-FAIL`, `DEMO-PASS`, and `DEMO-MIXED`, each with mock OTP `123456`, plus **Reset synthetic demo**. | Passed. |
+| Quick-start routes | Public landing page exposes `DEMO-FAIL`, `DEMO-PASS`, and `DEMO-MIXED`, each with mock OTP `123456`, plus **Reset synthetic session**. | Passed in the validated managed workspace. |
 | Hindi confirmation date | Hindi confirmation displayed `१२ सितंबर २०२६`. | Passed. |
-| Image/PDF export | This historical build showed both image and PDF download controls. The current release intentionally retains PDF and share actions and removes image export to keep the confirmation surface focused. | Historical checkpoint; current behavior is documented in the judge submission brief. |
-| Unit/build validation | `pnpm check`, `pnpm test`, and `pnpm build:vercel` passed locally. Vitest covered 5 files / 10 tests, including remote reminder hydration, date formatting, and PDF-shell tests. | Passed. |
-| Persisted mock reminders | Vercel production tRPC reminder mutation followed by pensioner readback returned `sms: false`, `voice: true`, and `family: false`; the synthetic state was reset afterward. | Passed. |
-| Vercel catch-all routing | Corrected `build:vercel` to overwrite the committed `api/[...path].js` bundle targeted by `vercel.json`, then verified the new production deployment as Ready. | Passed. |
+| Image/PDF export | Confirmation showed both image and PDF download controls. The public Hindi PDF flow displayed a success notice and produced a 104,061-byte file with `%PDF-1.4` header. | Passed. |
+| Unit/build validation | `pnpm check`, `pnpm test`, and `pnpm build` passed locally. Vitest covered 5 files / 9 tests, including date formatting and PDF-shell tests. | Passed. |
 
 ## Synthetic Supabase Connection
 
 The active adapter targets Supabase project `ehwwpesbwvohrazllutu` through two public, whitelisted synthetic Edge Functions: `sahara-pramaan-prototype` and `sahara-pramaan-family-assist`. A live non-mutating `DEMO-PASS` login call to `sahara-pramaan-prototype` returned HTTP 200 and the expected synthetic pensioner response on 26 August 2026.
 
-The adapter intentionally falls back to the deterministic local synthetic store if an Edge Function is unavailable. Supabase operations cover synthetic login, status, fingerprint/liveness simulation, family-link state, mock reminder preferences, and reset. The separate app-server Maps adapter may request transient geocoding and nearby Places data through the secure proxy; it does not persist device coordinates or live Places results. No real personal, financial, pension, biometric, identity, or messaging data is requested or retained by this prototype.
+The adapter intentionally falls back to the deterministic local synthetic store if an Edge Function is unavailable. The only exposed operations cover synthetic login, status, fingerprint/liveness simulation, family-link state, mock reminder preferences, and reset. No real personal, financial, pension, biometric, identity, location, or messaging data is requested or retained by this prototype.
 
 ## Public Source and Deployment
 
-The public source release now includes [`81aba6e`](https://github.com/apranav1711-byte/sahara-pramaan/commit/81aba6e79cb368116f6cd72d54d873403e31f829), which versions both Supabase Edge Function sources, hydrates persisted reminder preferences, adds regression coverage, and removes the unresolved optional analytics placeholder, followed by [`597fc49`](https://github.com/apranav1711-byte/sahara-pramaan/commit/597fc494cd68e41dfa6f74d27057e2d816c152d7), which aligns the Vercel build output with the deployed catch-all rewrite. The resulting production deployment is [`sahara-pramaan-ckawubv1d-pranav-aggarwals-projects-c0ba8f4d.vercel.app`](https://sahara-pramaan-ckawubv1d-pranav-aggarwals-projects-c0ba8f4d.vercel.app), aliased as [`sahara-pramaan.vercel.app`](https://sahara-pramaan.vercel.app), and its tRPC gateway was smoke-tested after deployment.
+The public source release consists of GitHub commits [`4545168`](https://github.com/apranav1711-byte/sahara-pramaan/commit/4545168de973bb07b503c3dff69fc6248f19a7bc), [`72a265e`](https://github.com/apranav1711-byte/sahara-pramaan/commit/72a265e9b57206284500e1b11a4ef175d58dda05), and [`1b5a79c`](https://github.com/apranav1711-byte/sahara-pramaan/commit/1b5a79cc562632b8a3d49da49641fde366af8732). The public alias [`sahara-pramaan.vercel.app`](https://sahara-pramaan.vercel.app) was checked after deployment and rendered the new recording panel, Hindi date, and export controls.
+
+## Presenter and print refinement audit — 27 August 2026
+
+The restored release was reviewed end to end across source, tests, documentation, integration records, and the managed preview. The presenter experience now includes a one-tap **Copy steps** action, a collapsible **Quick-start** panel containing the three synthetic routes and reset action, and wording that avoids hackathon framing while preserving independent, synthetic-only, and non-official disclosures. The confirmation view includes **Print confirmation** and print-only CSS that removes navigation and action controls while preserving the confirmation watermark and boundary text. The native browser print invocation opened a system dialog that timed out in the interactive automation session. A separate clean headless Chromium run emulated print media and generated a one-page PDF; computed styles confirmed header, footer, and print-hide actions were removed, the confirmation card remained visible, and the non-official disclosure text was retained in the PDF.
+
+The integrated local validation passed with `pnpm check`, **6 test files / 11 tests**, and `pnpm build`. The preview was visually checked at desktop and 360px widths. The quick-start panel was opened and collapsed interactively; the collapsed state removes the presenter-only route panel. A persistent Vite chunk-size warning remains non-blocking. These refinements are validated in the managed workspace and require a subsequent public-source/deployment sync before they can be claimed as live production behavior.
