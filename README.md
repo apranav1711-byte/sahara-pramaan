@@ -1,16 +1,12 @@
 # Sahara Pramaan
 
-**Sahara Pramaan** is an independent service concept that explores a clearer, more accessible way to complete an annual certificate-support step when a fingerprint attempt fails or a pensioner needs family assistance.
+**Sahara Pramaan** is an independent, public synthetic prototype that explores a clearer, more accessible way to complete an annual life-certificate step when a fingerprint attempt fails or a pensioner needs family assistance.
 
-> **Independent service concept — synthetic data only.** This project is not affiliated with the Government of India, UIDAI, India Post, any bank, or any pension authority. It does not connect to government, financial, biometric, messaging, or identity-verification systems.
-
-## Judge-facing submission brief
-
-For the complete problem statement, India-specific design rationale, architecture, reproducible demo route, evidence, limitations, and roadmap, start with [`docs/judge-submission.md`](./docs/judge-submission.md).
+> **Independent prototype — synthetic data only.** This project is not affiliated with the Government of India, UIDAI, India Post, any bank, or any pension authority. It does not connect to government, financial, biometric, messaging, or identity-verification systems.
 
 ## What works today
 
-The application is a responsive, mobile-first service experience with a public landing page, synthetic demo login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness journey. It also includes persisted mock reminder preferences, guided one-step instructions, explicit offline and session-only states, a comprehensive disclosure screen, high-contrast and large-type comfort controls, light/dark themes, a fully rendered language selector for English, Hindi, Bengali, Marathi, Telugu, Tamil, Gujarati, Kannada, Malayalam, and Punjabi, browser-native read-aloud controls with an immediate stop action, installable PWA assets, and a local offline shell.
+The application is a responsive, mobile-first prototype with a public landing page, synthetic login, a plain-language pensioner home, deterministic fingerprint paths, and a camera-permission-safe liveness simulation. It also includes a synthetic confirmation image and PDF export, print-friendly confirmation styling, a one-tap presenter walkthrough card, a hideable quick-start panel, an illustrative camp locator, synthetic reminder preferences, a comprehensive disclosure screen, high-contrast and large-type comfort controls, Hindi/English switching, and browser-native read-aloud controls.
 
 | Journey | Demonstration behavior |
 | --- | --- |
@@ -19,27 +15,27 @@ The application is a responsive, mobile-first service experience with a public l
 | Family assistance | A public share link opens an assistance page with a synthetic shared-memory check; its completion updates the pensioner window through a Supabase-backed synthetic status record. |
 | Liveness | The camera can be requested for a preview only. If access is denied or unavailable, the user can continue through a clearly labeled simulated path. |
 
-## Recording-ready demo accounts
+## Quick-start synthetic accounts
 
-All credentials below are synthetic and exist solely for the service concept’s demo environment.
+All credentials below are synthetic and exist solely for the prototype.
 
-| Purpose | Pension ID | Mock OTP | Expected outcome |
+| Route | Pension ID | Mock OTP | Expected outcome |
 | --- | --- | --- |
-| Fallback recording flow | `DEMO-FAIL` | `123456` | Deterministic simulated fingerprint failure. |
-| Success recording flow | `DEMO-PASS` | `123456` | Deterministic simulated fingerprint success. |
-| Optional mixed path | `DEMO-MIXED` | `123456` | Controlled simulated result for exploratory testing. |
+| Alternate verification route | `DEMO-FAIL` | `123456` | Deterministic simulated fingerprint failure. |
+| Fingerprint success route | `DEMO-PASS` | `123456` | Deterministic simulated fingerprint success. |
+| Exploratory route | `DEMO-MIXED` | `123456` | Controlled simulated result for exploratory testing. |
 
 ## Two-window family-assist QA procedure
 
-Open the application in a first browser window, sign in as `DEMO-FAIL`, start verification, and choose **Ask family to help**. Copy the generated share link. Open it in a second window in the same browser profile or incognito session. The second window contains the synthetic answer directly beneath the question for recording reliability. Complete the assisted flow and keep the first pensioner window open. It polls its synthetic status every two seconds while the family state is pending, stops after completion, and should show **Submitted in this demo** within five seconds.
+Open the application in a first browser window, sign in as `DEMO-FAIL`, start verification, and choose **Ask family to help**. Copy the generated share link. Open it in a second window in the same browser profile or incognito session. The second window contains the synthetic answer directly beneath the question for recording reliability. Complete the assisted flow and keep the first pensioner window open. It polls its synthetic status every two seconds and should show **Submitted in this prototype** within five seconds.
 
-The user experience deliberately states that family assistance is a **synthetic assistance mechanism, not a secure identity-verification method**. It must never be represented as a production identity solution or a way to impersonate anyone.
+The user experience deliberately states that family assistance is a **prototype assistance mechanism, not a secure identity-verification method**. It must never be represented as a production identity solution or a way to impersonate anyone.
 
 ## Synthetic data and privacy boundary
 
-The project contains only synthetic pensioners, simulated biometric and liveness outcomes, mock OTPs, synthetic fallback location names and distances, fake confirmation references, and simulated reminder preferences. Live Google Places results are fetched transiently through the server-side proxy for the locator and are not written to the project database. No real Aadhaar, PAN, payment details, accounts, biometric information, photos, or messages are used or stored.
+The project contains only synthetic pensioners, simulated biometric and liveness outcomes, mock OTPs, illustrative camp names and distances, fake confirmation references, and simulated reminder preferences. No real Aadhaar, PAN, payment details, accounts, biometric information, photos, location data, or messages are used or stored.
 
-Supabase is used only for the synthetic state required for the public two-window demonstration. The application uses two whitelisted edge functions and three isolated tables:
+Supabase is used only for the synthetic prototype state required for the public two-window demonstration. The application uses two whitelisted edge functions and three isolated tables:
 
 | Resource | Purpose | Explicit limitation |
 | --- | --- | --- |
@@ -47,15 +43,9 @@ Supabase is used only for the synthetic state required for the public two-window
 | `sp_family_assist_links` | Stores synthetic family-assist demo tokens and completion state. | Not a real authorization or identity-assurance mechanism. |
 | `sp_reminder_preferences` | Stores synthetic in-app reminder preferences. | No real SMS, voice call, email, or family notification is ever sent. |
 
-## India-first location behavior
+## Synthetic session reset
 
-The locator accepts a six-digit Indian PIN code and sends it to a server-side Google Maps proxy for postal-area geocoding, then requests nearby places using a support-oriented search. With explicit browser consent, the user may instead provide temporary device coordinates; coordinates are held in React state only and are not persisted. Results include a live Google map, distances, and **Open map** links when the proxy returns real Google Places data. If the proxy, credentials, quota, or map script is unavailable, the experience switches to clearly labeled synthetic illustrative locations; it never labels fallback records as live.
-
-A PIN code identifies a broad postal area and cannot identify an exact household location. A future DIGIPIN integration would require a separate official specification, device-level consent design, and privacy review.
-
-## Demo reset
-
-Open the top-right menu and choose **Reset synthetic demo**. This clears the synthetic Supabase state and local fallback state, returns the app to the landing page, and makes a fresh recording take possible. Use the reset before each video recording attempt. The menu also contains the preferred-language selector, light/dark theme control, guided-mode switch, read-aloud action, and stop-reading action.
+Open the top-right menu and choose **Reset synthetic session**. This clears the synthetic Supabase state and local fallback state, returns the app to the landing page, and makes a fresh walkthrough possible. Use the reset before each recording attempt.
 
 ## Local development
 
@@ -69,14 +59,11 @@ Run the implementation checks with:
 ```bash
 pnpm check
 pnpm test
-pnpm build:vercel
 ```
-
-The production build emits a Vite client bundle, a committed Vercel catch-all tRPC function at `api/[...path].js`, an installable manifest, a lightweight brand icon, and a network-first service worker. The service worker never caches `/api/` responses.
 
 ## Architecture
 
-The user interface is built with React, TypeScript, Tailwind CSS, a typed tRPC API layer, guided accessibility controls, browser-native speech/camera functions, and an installable PWA shell. Synthetic product contracts live in [`shared/mockData.ts`](./shared/mockData.ts). The local deterministic fallback is in [`server/demoStore.ts`](./server/demoStore.ts), while the Supabase-compatible server adapter is in [`server/supabasePrototype.ts`](./server/supabasePrototype.ts). The system deliberately retains a local fallback so the mock demo can remain recoverable if the public synthetic persistence layer is temporarily unavailable.
+The user interface is built with React, TypeScript, Tailwind CSS, a typed tRPC API layer, and browser-native accessibility functions. Synthetic product contracts live in [`shared/mockData.ts`](./shared/mockData.ts). The local deterministic fallback is in [`server/demoStore.ts`](./server/demoStore.ts), while the Supabase-compatible server adapter is in [`server/supabasePrototype.ts`](./server/supabasePrototype.ts). The system deliberately retains a local fallback so the mock demo can remain recoverable if the public synthetic persistence layer is temporarily unavailable.
 
 ## At scale, for real
 
@@ -84,12 +71,8 @@ A production service would require far more than this prototype: properly audite
 
 ## Video production
 
-The final demo video is intentionally deferred until the project owner supplies the screen-recording walkthrough. The planned video must use the deployed public URL, clearly state what is simulated, show the two-window family update, and remain two minutes or less.
-
-## Release handoff
-
-The public `main` branch is connected to Vercel production. Supabase function sources live under `supabase/functions/`, and the applied family-link schema change is recorded in `drizzle/0001_add_family_assist_attempt_limits.sql`. See [`docs/judge-submission.md`](./docs/judge-submission.md), [`docs/integration-status.md`](./docs/integration-status.md), [`docs/enhancement-release-2026-08-26.md`](./docs/enhancement-release-2026-08-26.md), [`docs/productization-handoff.md`](./docs/productization-handoff.md), [`docs/india-hackathon-roadmap.md`](./docs/india-hackathon-roadmap.md), and [`supabase/functions/README.md`](./supabase/functions/README.md) for the operational record.
+The final product video is intentionally deferred until the project owner supplies the screen-recording walkthrough. The planned video must use the deployed public URL, clearly state what is synthetic, show the two-window family update, and remain two minutes or less.
 
 ## Tooling disclosure
 
-The finished build was developed through iterative human direction with Manus, using the project environment, Supabase management integration, GitHub, and Vercel workflow. The finished service concept intentionally does not claim any real identity, pension, biometric, government, financial, location, or messaging integration.
+The prototype was created through iterative human direction with Manus, using the provided project environment, Supabase management integration, GitHub, and Vercel workflow. The final submission should name only the tools actually used in the finished build.
