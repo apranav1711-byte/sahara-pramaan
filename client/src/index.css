@@ -58,6 +58,43 @@ html.dark .text-violet-800 { color: #dac9ff !important; }
 html.dark .bg-sky-100 { background-color: #16394d !important; }
 html.dark .text-sky-800 { color: #a7ddff !important; }
 
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-transitioning body,
+  html.theme-transitioning .bg-sahara-cream,
+  html.theme-transitioning .bg-white,
+  html.theme-transitioning .bg-white\/70,
+  html.theme-transitioning .bg-white\/85,
+  html.theme-transitioning .bg-white\/74,
+  html.theme-transitioning .bg-sahara-mist,
+  html.theme-transitioning .bg-sahara-mint,
+  html.theme-transitioning .bg-sahara-ink,
+  html.theme-transitioning .bg-sahara-forest,
+  html.theme-transitioning .bg-emerald-100,
+  html.theme-transitioning .bg-violet-100,
+  html.theme-transitioning .bg-sky-100,
+  html.theme-transitioning .bg-sahara-sun,
+  html.theme-transitioning .paper-noise {
+    transition: background-color 280ms cubic-bezier(.23, 1, .32, 1), background-image 280ms cubic-bezier(.23, 1, .32, 1);
+  }
+
+  html.theme-transitioning .text-sahara-ink,
+  html.theme-transitioning .text-sahara-forest,
+  html.theme-transitioning .text-slate-500,
+  html.theme-transitioning .text-slate-600,
+  html.theme-transitioning .text-emerald-700,
+  html.theme-transitioning .text-emerald-800,
+  html.theme-transitioning .text-violet-800,
+  html.theme-transitioning .text-sky-800 {
+    transition: color 180ms cubic-bezier(.23, 1, .32, 1);
+  }
+
+  html.theme-transitioning .border-sahara-ink\/10,
+  html.theme-transitioning .border-sahara-ink\/15,
+  html.theme-transitioning .border-sahara-forest\/15 {
+    transition: border-color 280ms cubic-bezier(.23, 1, .32, 1);
+  }
+}
+
 /* High contrast is an explicit accessibility preference and overrides either palette. */
 html.dark .high-contrast, .high-contrast { background: #fff !important; color: #000 !important; }
 html.dark .high-contrast .bg-sahara-cream, html.dark .high-contrast .bg-white, html.dark .high-contrast .bg-white\/70, html.dark .high-contrast .bg-white\/85, html.dark .high-contrast .bg-white\/74, html.dark .high-contrast .bg-sahara-mist, html.dark .high-contrast .bg-sahara-mint { background-color: #fff !important; }
